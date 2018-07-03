@@ -1,6 +1,5 @@
 package tk.cs8898.elfofflinett.model.licence;
 
-import tk.cs8898.elfofflinett.model.licence.licenses.Apache2;
 import tk.cs8898.elfofflinett.model.licence.licenses.GenericLicense;
 import tk.cs8898.elfofflinett.model.licence.licenses.ILicense;
 import tk.cs8898.elfofflinett.model.licence.licenses.WTFPL;

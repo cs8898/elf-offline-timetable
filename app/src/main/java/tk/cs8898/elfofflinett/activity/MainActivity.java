@@ -3,6 +3,7 @@ package tk.cs8898.elfofflinett.activity;
 import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.SubMenu;
@@ -55,25 +56,15 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //STUFF DONE BY WeekView
-        // Get a reference for the week view in the layout.
+        //STUFF DONE For Week View
         mWeekView = findViewById(R.id.my_weekview);
 
         MyWeekViewListener mWeekViewListener = new MyWeekViewListener();
-
-        // Set an action when any event is clicked.
         mWeekView.setOnEventClickListener(mWeekViewListener);
-
-        // The week view has infinite scrolling horizontally. We have to provide the events of a
-        // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(mWeekViewListener);
-
-        // Set long press listener for events.
         mWeekView.setEventLongPressListener(mWeekViewListener);
 
         MarkedActsService.setWeekView(mWeekView);
-
-        //WEEKViewSetup
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +123,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -146,9 +137,9 @@ public class MainActivity extends AppCompatActivity
             Intent settingIntent = new Intent(this, LicenseActivity.class);
             startActivity(settingIntent);
         } else {
-            //Toast.makeText(this, "Not Implemented", Toast.LENGTH_LONG).show();
-            if (filters.contains(item.getTitle())) {
-                filters.remove(item.getTitle());
+            String filterStageTitle = item.getTitle().toString();
+            if (filters.contains(filterStageTitle)) {
+                filters.remove(filterStageTitle);
                 item.setIcon(R.drawable.ic_check_box);
             } else {
                 filters.add((String) item.getTitle());
@@ -194,14 +185,18 @@ public class MainActivity extends AppCompatActivity
             //List<WeekViewEvent> events = getEvents(newYear, newMonth);
             poulateFilters();
             Collection<InternalActEntity> acts;
-            if (currentView.equals(MARKED_VIEW)) {
-                acts = MarkedActsService.getMarked();
-            } else if (currentView.equals(ALL_VIEW)) {
-                acts = MarkedActsService.getActs();
-            } else {
-                acts = new ArrayList<>();
+            switch (currentView) {
+                case MARKED_VIEW:
+                    acts = MarkedActsService.getMarked();
+                    break;
+                case ALL_VIEW:
+                    acts = MarkedActsService.getActs();
+                    break;
+                default:
+                    acts = new ArrayList<>();
+                    break;
             }
-            List<WeekViewEvent> eventsList = new ArrayList<WeekViewEvent>();
+            List<WeekViewEvent> eventsList = new ArrayList<>();
             for (InternalActEntity act : acts) {
                 Calendar actStart = act.getTime();
                 Calendar actEnd = act.getEnd();

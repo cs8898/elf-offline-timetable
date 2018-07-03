@@ -4,16 +4,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 
 public class Common {
-    public static boolean isOnline(Context context)
-    {
-        try
-        {
-            ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            return cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    public static boolean isOnline(Context context) {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (cm != null)
+                return cm.getActiveNetworkInfo().isConnectedOrConnecting();
+        } catch (Exception ignored) {
         }
-        catch (Exception e)
-        {
-            return false;
-        }
+        return false;
     }
 }

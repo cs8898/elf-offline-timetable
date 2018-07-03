@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import tk.cs8898.elfofflinett.model.Common;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
 import tk.cs8898.elfofflinett.model.entity.StageEntity;
@@ -25,12 +26,9 @@ import tk.cs8898.elfofflinett.model.entity.StageEntity;
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
 public class FetchTimeTableService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_FETCH_TIMETABLE = "tk.cs8898.elfofflinett.action.fetchtimetable";
     private static final String EXTRA_URL = "tk.cs8898.elfofflinett.extra.url";
     private static final String EXTRA_OFFLINE = "tk.cs8898.elfofflinett.extra.offline";
@@ -84,11 +82,13 @@ public class FetchTimeTableService extends IntentService {
                     .build();
             try {
                 Response response = okHttpClient.newCall(request).execute();
-                assert response.body() != null;
-                String body = response.body().string();
+                ResponseBody body = response.body();
+                if(body == null)
+                    throw new IOException("Can't get response Body");
+                String json = body.string();
                 FileOutputStream fileOutputStream = openFileOutput(LOCAL_FILE, MODE_PRIVATE);
                 PrintWriter printWriter = new PrintWriter(fileOutputStream);
-                printWriter.print(body);
+                printWriter.print(json);
                 printWriter.close();
                 fileOutputStream.close();
             } catch (IOException e) {
@@ -99,8 +99,10 @@ public class FetchTimeTableService extends IntentService {
         try {
             FileInputStream fileInputStream = openFileInput(LOCAL_FILE);
             byte[] data = new byte[fileInputStream.available()];
-            fileInputStream.read(data);
+            int len = fileInputStream.read(data);
             fileInputStream.close();
+            if(len!=data.length)
+                throw new IOException("Wasn't able to read all data");
 
             String jsonBody = new String(data, "UTF-8");
 

@@ -1,6 +1,7 @@
 package tk.cs8898.elfofflinett.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +24,16 @@ public class MyLicenseListAdapter extends ArrayAdapter<LicenseListEntry> {
         this.context = context;
     }
 
+    @NonNull
     @Override
-    public View getView(int i, View convertView, ViewGroup parent) {
+    public View getView(int i, View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert inflater != null;
         if(convertView==null) {
             convertView = inflater.inflate(R.layout.row_license_entry, parent, false);
         }
+        assert convertView != null;
         LinearLayout projectList = convertView.findViewById(R.id.project_list);
         projectList.removeAllViews();
 

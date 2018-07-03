@@ -1,5 +1,6 @@
 package tk.cs8898.elfofflinett.model.database;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -8,10 +9,8 @@ import com.alamkanak.weekview.WeekView;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import tk.cs8898.elfofflinett.model.entity.ActEntity;
@@ -22,8 +21,9 @@ public class MarkedActsService {
     private static final String PREFERENCES_NAME = "tk.cs8898.elfofflinett.preferences";
     private static final String MARKED_NAME = "marked";
 
+    @SuppressLint("StaticFieldLeak")
     private static WeekView weekView;
-    private static Map<String, InternalActEntity> actMap;
+    //TODO find better Solution
     private static List<InternalActEntity> acts;
 
     public static Set<String> getMarkedString() {
@@ -71,6 +71,7 @@ public class MarkedActsService {
         saveMarks(context,false);
     }
 
+    @SuppressLint("ApplySharedPref")
     public static void saveMarks(Context context, boolean force) {
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit().putStringSet(MARKED_NAME, getMarkedString());
