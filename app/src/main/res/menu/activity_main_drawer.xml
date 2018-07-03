@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_home"
+            android:title="@string/nav_home_text"
+            android:checked="true"/>
+        <item
+            android:id="@+id/nav_all"
+            android:icon="@drawable/ic_menu_timetable"
+            android:title="@string/nav_all_text" />
+    </group>
+
+    <item
+        android:id="@+id/nav_filter_menu"
+        android:title="Filters">
+        <menu>
+            <group android:checkableBehavior="none" android:id="@+id/nav_filter_group">
+
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Other">
+        <menu>
+            <!--<item
+                android:id="@+id/nav_manage"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Manage" />-->
+            <item
+                android:id="@+id/nav_licence"
+                android:icon="@drawable/ic_menu_list"
+                android:title="@string/title_activity_licence" />
+        </menu>
+    </item>
+
+</menu>
