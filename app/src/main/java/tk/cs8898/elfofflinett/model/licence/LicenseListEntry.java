@@ -22,7 +22,7 @@ public class LicenseListEntry {
     @SuppressWarnings("SpellCheckingInspection")
     public static List<LicenseListEntry> getUsedLicenses() {
         ArrayList<ILicense> licenses = new ArrayList<>();
-        licenses.add(new WTFPL("ElectricLoveFestival Offline TimeTable", "https://github.com/cs8898/elf-offline-timetable"));
+        licenses.add(new WTFPL("ELF Offline TimeTable", "https://github.com/cs8898/elf-offline-timetable"));
         licenses.add(new GenericLicense("google-gson", "https://github.com/google/gson","Copyright 2008 Google Inc.\n" +
                 "\n" +
                 "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +

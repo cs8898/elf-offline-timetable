@@ -13,19 +13,21 @@ import tk.cs8898.elfofflinett.R;
 
 public class InternalActEntity {
     //July 5, 2018 15:45
-    private static final SimpleDateFormat dateFormat =new SimpleDateFormat("MMMM d, yyyy HH:mm", Locale.US);
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy HH:mm", Locale.US);
 
-    ActEntity act;
-    StageEntity stage;
-    boolean marked;
+    private ActEntity act;
+    private StageEntity stage;
+    private boolean marked;
+    private long id;
 
-    public InternalActEntity(StageEntity stage, ActEntity act){
-        this(stage,act,false);
+    public InternalActEntity(StageEntity stage, ActEntity act, long id) {
+        this(stage, act, id, false);
     }
 
-    public InternalActEntity(StageEntity stage, ActEntity act, boolean marked) {
+    public InternalActEntity(StageEntity stage, ActEntity act, long id, boolean marked) {
         this.stage = stage;
         this.act = act;
+        this.id = id;
         this.marked = marked;
     }
 
@@ -45,7 +47,7 @@ public class InternalActEntity {
         this.stage = stage;
     }
 
-    public void setMarked(boolean marked){
+    public void setMarked(boolean marked) {
         this.marked = marked;
     }
 
@@ -53,7 +55,7 @@ public class InternalActEntity {
         return marked;
     }
 
-    public Calendar getTime(){
+    public Calendar getTime() {
         Calendar cal = Calendar.getInstance();
         try {
             cal.setTime(dateFormat.parse(this.act.getTime()));
@@ -77,7 +79,7 @@ public class InternalActEntity {
 
     @Override
     public String toString() {
-        return this.stage.toString()+";"+this.act.toString();
+        return this.stage.toString() + ";" + this.act.toString();
     }
 
     public String getName() {
@@ -90,30 +92,30 @@ public class InternalActEntity {
 
     public int getColor(Context context) {
         int color;
-        switch(getLocation()){
+        switch (getLocation()) {
             case "Mainstage":
-                if(isMarked())
-                    color = ContextCompat.getColor(context,R.color.mainstage);
+                if (isMarked())
+                    color = ContextCompat.getColor(context, R.color.mainstage);
                 else
-                    color = ContextCompat.getColor(context,R.color.mainstage_alt);
+                    color = ContextCompat.getColor(context, R.color.mainstage_alt);
                 break;
             case "Club Circus":
-                if(isMarked())
-                    color = ContextCompat.getColor(context,R.color.clubcircous);
+                if (isMarked())
+                    color = ContextCompat.getColor(context, R.color.clubcircous);
                 else
-                    color = ContextCompat.getColor(context,R.color.clubcircous_alt);
+                    color = ContextCompat.getColor(context, R.color.clubcircous_alt);
                 break;
             case "Heineken Starclub":
-                if(isMarked())
-                    color = ContextCompat.getColor(context,R.color.heineken);
+                if (isMarked())
+                    color = ContextCompat.getColor(context, R.color.heineken);
                 else
-                    color = ContextCompat.getColor(context,R.color.heineken_alt);
+                    color = ContextCompat.getColor(context, R.color.heineken_alt);
                 break;
             case "Q-Dance":
-                if(isMarked())
-                    color = ContextCompat.getColor(context,R.color.qdance);
+                if (isMarked())
+                    color = ContextCompat.getColor(context, R.color.qdance);
                 else
-                    color = ContextCompat.getColor(context,R.color.qdance_alt);
+                    color = ContextCompat.getColor(context, R.color.qdance_alt);
                 break;
             default:
                 color = Color.BLACK;
@@ -121,8 +123,16 @@ public class InternalActEntity {
         return color;
     }
 
+    public void setId(long id){
+        this.id = id;
+    }
+
+    public long getId(){
+        return id;
+    }
+
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return this.toString().hashCode();
     }
 }

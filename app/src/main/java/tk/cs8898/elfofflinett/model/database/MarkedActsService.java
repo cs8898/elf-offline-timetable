@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import tk.cs8898.elfofflinett.model.entity.ActEntity;
@@ -21,12 +23,13 @@ public class MarkedActsService {
     private static final String MARKED_NAME = "marked";
 
     private static WeekView weekView;
-    private static HashMap<String, InternalActEntity> acts;
+    private static Map<String, InternalActEntity> actMap;
+    private static List<InternalActEntity> acts;
 
     public static Set<String> getMarkedString() {
         Set<String> marked = new HashSet<>();
         if (acts != null)
-            for (InternalActEntity act : acts.values()) {
+            for (InternalActEntity act : acts) {
                 if (act.isMarked()) {
                     marked.add(act.toString());
                 }
@@ -36,14 +39,14 @@ public class MarkedActsService {
 
     public static Collection<InternalActEntity> getActs() {
         if (acts != null)
-            return acts.values();
+            return acts;
         return new ArrayList<>();
     }
 
     public static Collection<InternalActEntity> getMarked() {
         HashSet<InternalActEntity> marked = new HashSet<>();
         if (acts != null) {
-            for (InternalActEntity act : acts.values()) {
+            for (InternalActEntity act : acts) {
                 if (act.isMarked())
                     marked.add(act);
             }
@@ -53,11 +56,11 @@ public class MarkedActsService {
 
     public static void setAllActs(Context context, StageEntity[] stages) {
         //saveMarks(context);
-        acts = new HashMap<>();
+        int i = 0;
+        acts = new ArrayList<>();
         for (StageEntity stage : stages) {
             for (ActEntity act : stage.getActs()) {
-                InternalActEntity internalAct = new InternalActEntity(stage, act);
-                acts.put(internalAct.toString(), internalAct);
+                acts.add(new InternalActEntity(stage, act, i++));
             }
         }
         loadMarks(context);
@@ -83,9 +86,12 @@ public class MarkedActsService {
             Set<String> markSet = preferences.getStringSet(MARKED_NAME, new HashSet<String>());
             for (String marked : markSet) {
                 Log.d("MarkedActsService","Marking "+marked);
-                InternalActEntity act = acts.get(marked);
-                if (act != null)
-                    act.setMarked(true);
+                for(InternalActEntity act: acts){
+                    if(act.toString().equals(marked)) {
+                        act.setMarked(true);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -96,8 +102,8 @@ public class MarkedActsService {
 
     public static InternalActEntity findAct(long id) {
         if (acts != null)
-            for (InternalActEntity act : acts.values()) {
-                if (act.hashCode() == id) {
+            for (InternalActEntity act : acts) {
+                if (act.getId() == id) {
                     return act;
                 }
             }
@@ -107,7 +113,7 @@ public class MarkedActsService {
     public static Set<String> getLocations() {
         HashSet<String> locations = new HashSet<>();
         if (acts != null)
-            for (InternalActEntity act : acts.values()) {
+            for (InternalActEntity act : acts) {
                 locations.add(act.getLocation());
             }
         return locations;

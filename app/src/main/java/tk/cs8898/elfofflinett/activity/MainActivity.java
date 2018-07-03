@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity
     private static final String ALL_VIEW = "tk.cs8898.elfofflinett.view.all";
 
     private WeekView mWeekView;
-    private MyWeekViewListener mWeekViewListener;
 
     private static final String JSON_URL = "https://hive.ddnss.de/elf18tt_min.json";
     private String currentView;
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity
         // Get a reference for the week view in the layout.
         mWeekView = findViewById(R.id.my_weekview);
 
-        mWeekViewListener = new MyWeekViewListener();
+        MyWeekViewListener mWeekViewListener = new MyWeekViewListener();
 
         // Set an action when any event is clicked.
         mWeekView.setOnEventClickListener(mWeekViewListener);
@@ -204,7 +203,6 @@ public class MainActivity extends AppCompatActivity
             }
             List<WeekViewEvent> eventsList = new ArrayList<WeekViewEvent>();
             for (InternalActEntity act : acts) {
-                boolean skip = false;
                 Calendar actStart = act.getTime();
                 Calendar actEnd = act.getEnd();
                 if (actStart != null && actEnd != null) {
@@ -212,7 +210,7 @@ public class MainActivity extends AppCompatActivity
                         //FILTERS
                         if (filters.contains(act.getLocation()))
                             continue;
-                        WeekViewEvent event = new WeekViewEvent(act.hashCode(), act.getName(), act.getLocation(), actStart, actEnd);
+                        WeekViewEvent event = new WeekViewEvent(act.getId(), act.getName(), act.getLocation(), actStart, actEnd);
                         event.setColor(act.getColor(getApplicationContext()));
                         eventsList.add(event);
                     }
