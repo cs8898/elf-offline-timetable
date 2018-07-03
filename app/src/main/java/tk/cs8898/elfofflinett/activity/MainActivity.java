@@ -127,26 +127,30 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            currentView = MARKED_VIEW;
-            mWeekView.notifyDatasetChanged();
-        } else if (id == R.id.nav_all) {
-            currentView = ALL_VIEW;
-            mWeekView.notifyDatasetChanged();
-        } else if (id == R.id.nav_licence) {
-            Intent settingIntent = new Intent(this, LicenseActivity.class);
-            startActivity(settingIntent);
-        } else {
-            String filterStageTitle = item.getTitle().toString();
-            if (filters.contains(filterStageTitle)) {
-                filters.remove(filterStageTitle);
-                item.setIcon(R.drawable.ic_check_box);
-            } else {
-                filters.add((String) item.getTitle());
-                item.setIcon(R.drawable.ic_check_box_outline);
-            }
-            mWeekView.notifyDatasetChanged();
-            return true;
+        switch (id) {
+            case R.id.nav_home:
+                currentView = MARKED_VIEW;
+                mWeekView.notifyDatasetChanged();
+                break;
+            case R.id.nav_all:
+                currentView = ALL_VIEW;
+                mWeekView.notifyDatasetChanged();
+                break;
+            case R.id.nav_licence:
+                Intent settingIntent = new Intent(this, LicenseActivity.class);
+                startActivity(settingIntent);
+                break;
+            default:
+                String filterStageTitle = item.getTitle().toString();
+                if (filters.contains(filterStageTitle)) {
+                    filters.remove(filterStageTitle);
+                    item.setIcon(R.drawable.ic_check_box);
+                } else {
+                    filters.add((String) item.getTitle());
+                    item.setIcon(R.drawable.ic_check_box_outline);
+                }
+                mWeekView.notifyDatasetChanged();
+                return true;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -61,7 +61,7 @@ public class LicenseListEntry {
                 "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License."));
-        return getLicenseListEntrys(licenses);
+        return getLicenseListEntries(licenses);
     }
 
     private static LicenseListEntry getOfSameLicense(List<ILicense> list, int i) {
@@ -74,7 +74,7 @@ public class LicenseListEntry {
         return new LicenseListEntry(tmp);
     }
 
-    public static List<LicenseListEntry> getLicenseListEntrys(List<ILicense> list) {
+    public static List<LicenseListEntry> getLicenseListEntries(List<ILicense> list) {
         ArrayList<ILicense> tmp = new ArrayList<>();
         ArrayList<LicenseListEntry> tmp2 = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {

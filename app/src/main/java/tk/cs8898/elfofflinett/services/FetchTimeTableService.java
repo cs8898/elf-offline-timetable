@@ -48,7 +48,7 @@ public class FetchTimeTableService extends IntentService {
         startActionFetchTimetable(context, url, false);
     }
 
-    public static void startActionFetchTimetable(Context context, String url, boolean offline) {
+    private static void startActionFetchTimetable(Context context, String url, boolean offline) {
         Intent intent = new Intent(context, FetchTimeTableService.class);
         intent.setAction(ACTION_FETCH_TIMETABLE);
         intent.putExtra(EXTRA_URL, url);
