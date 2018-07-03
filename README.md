@@ -17,8 +17,8 @@ Small network footprint
 Screenshots:
 ------------
 
-[[https://github.com/cs8898/elf-offline-timetable/blob/master/screenshots/mylist.png|alt=mylist]]
-[[https://github.com/cs8898/elf-offline-timetable/blob/master/screenshots/fullist.png|alt=fullist]]
-[[https://github.com/cs8898/elf-offline-timetable/blob/master/screenshots/menu.png|alt=menu]]
+![My List](/screenshots/mylist.png)
+![Full List](/screenshots/fulllist.png)
+![Menu](/screenshots/menu.png)
 
 I'd like to thank Philipp for the JSON
