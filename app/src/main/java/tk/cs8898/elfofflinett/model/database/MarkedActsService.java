@@ -3,6 +3,7 @@ package tk.cs8898.elfofflinett.model.database;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Log;
 
 import com.alamkanak.weekview.WeekView;
@@ -64,7 +65,13 @@ public class MarkedActsService {
             }
         }
         loadMarks(context);
-        weekView.notifyDatasetChanged();
+        Handler mainHandler = new Handler(context.getMainLooper());
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                weekView.notifyDatasetChanged();
+            }
+        });
     }
 
     public static void saveMarks(Context context){
