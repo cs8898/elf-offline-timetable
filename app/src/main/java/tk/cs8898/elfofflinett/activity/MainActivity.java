@@ -119,6 +119,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_refresh) {
             FetchTimeTableService.startActionFetchTimetable(this, JSON_URL);
             return true;
+        }else if(id == R.id.action_change_daycount){
+            mWeekView.setNumberOfVisibleDays(mWeekView.getNumberOfVisibleDays()%3+1);
         }
 
         return super.onOptionsItemSelected(item);
