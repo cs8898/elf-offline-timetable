@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TimeZone;
 
 import tk.cs8898.elfofflinett.R;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
@@ -74,13 +75,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Set<InternalActEntity> currentActs = new HashSet<>();
         for (InternalActEntity act : MarkedActsService.getMarked()) {
-            if (act.getTime().equals(intentAct.getTime())) {
+            if (act.getTime().compareTo(intentAct.getTime()) == 0) {
                 currentActs.add(act);
             }
         }
         StringBuilder notificationBody = new StringBuilder();
         for (InternalActEntity act : currentActs) {
-            notificationBody.append(act.getLocation()).append(" - ")
+            notificationBody.append("[").append(act.getLocation()).append("] ")
                     .append(act.getName()).append("\n");
         }
 
@@ -99,13 +100,14 @@ public class AlarmReceiver extends BroadcastReceiver {
                 new Intent(), 0);
         notificationBuilder = notificationBuilder.setContentTitle("Currently on Stage")
                 .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentText(notificationBody.toString().split("\n",2)[0])
+                .setContentText(notificationBody.toString())
                 .setContentIntent(notificationIntent);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         assert notificationManager != null;
         notificationManager.cancel(NOTIFICATION_ID);
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
+        addNotificationDelays(context);
     }
 
     private void addNotificationDelays(Context context) {
@@ -137,9 +139,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         InternalActEntity minStart = null;
+        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"), Locale.GERMANY);
+
         for (InternalActEntity act : MarkedActsService.getMarked()) {
-            if (minStart == null ||
-                    (Calendar.getInstance(Locale.GERMANY).before(act.getTime()) && minStart.getTime().after(act.getTime()))) {
+            if (act.getTime().after(now) &&
+                    (minStart == null || act.getTime().before(minStart.getTime()))) {
                 minStart = act;
             }
         }

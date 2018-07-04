@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import tk.cs8898.elfofflinett.R;
 
@@ -56,7 +57,7 @@ public class InternalActEntity {
     }
 
     public Calendar getTime() {
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"),Locale.GERMANY);
         try {
             cal.setTime(dateFormat.parse(this.act.getTime()));
         } catch (ParseException e) {
@@ -67,7 +68,7 @@ public class InternalActEntity {
     }
 
     public Calendar getEnd() {
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"),Locale.GERMANY);
         try {
             cal.setTime(dateFormat.parse(this.act.getEnd()));
         } catch (ParseException e) {

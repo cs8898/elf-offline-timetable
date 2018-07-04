@@ -34,7 +34,6 @@ import tk.cs8898.elfofflinett.model.database.MarkedActsService;
 import tk.cs8898.elfofflinett.model.entity.InternalActEntity;
 import tk.cs8898.elfofflinett.receiver.AlarmReceiver;
 import tk.cs8898.elfofflinett.services.FetchTimeTableService;
-//import tk.cs8898.elfofflinett.services.NotificationService;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -169,24 +168,21 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onEventClick(WeekViewEvent event, RectF eventRect) {
-            InternalActEntity act = MarkedActsService.findAct(event.getId());
-            if (act != null && currentView.equals(ALL_VIEW)) {
-                act.setMarked(!act.isMarked());
-                //event.setColor(act.getColor(getApplicationContext()));
-                Log.d("MainActivity","Marked Event size: "+MarkedActsService.getMarkedString().size());
-                mWeekView.notifyDatasetChanged();
-                MarkedActsService.saveMarks(getApplicationContext());
-            }
+            toggleEvent(event.getId());
         }
 
         @Override
         public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-            InternalActEntity act = MarkedActsService.findAct(event.getId());
+            toggleEvent(event.getId());
+        }
+
+        private void toggleEvent(long id){
+            InternalActEntity act = MarkedActsService.findAct(id);
             if (act != null) {
                 act.setMarked(!act.isMarked());
-                //event.setColor(act.getColor(getApplicationContext()));
                 mWeekView.notifyDatasetChanged();
                 MarkedActsService.saveMarks(getApplicationContext());
+                AlarmReceiver.start(getApplicationContext());
             }
         }
 
