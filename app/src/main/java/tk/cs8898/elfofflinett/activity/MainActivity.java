@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity
 
     private WeekView mWeekView;
 
-    private static final String JSON_URL = "https://hive.ddnss.de/elf18tt_min.json";
+    private static final String JSON_URL = "https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/elf18tt_min.json";
     private String currentView;
     private SubMenu filterMenu;
 
