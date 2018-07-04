@@ -55,7 +55,7 @@ public class MarkedActsService {
         return marked;
     }
 
-    public static void setAllActs(Context context, StageEntity[] stages) {
+    public static void setAllActs(Context context, StageEntity[] stages, boolean update) {
         //saveMarks(context);
         int i = 0;
         acts = new ArrayList<>();
@@ -65,13 +65,15 @@ public class MarkedActsService {
             }
         }
         loadMarks(context);
-        Handler mainHandler = new Handler(context.getMainLooper());
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                weekView.notifyDatasetChanged();
-            }
-        });
+        if(update) {
+            Handler mainHandler = new Handler(context.getMainLooper());
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    weekView.notifyDatasetChanged();
+                }
+            });
+        }
     }
 
     public static void saveMarks(Context context){
@@ -112,6 +114,16 @@ public class MarkedActsService {
         if (acts != null)
             for (InternalActEntity act : acts) {
                 if (act.getId() == id) {
+                    return act;
+                }
+            }
+        return null;
+    }
+
+    public static InternalActEntity findAct(String actString) {
+        if (acts != null)
+            for (InternalActEntity act : acts) {
+                if (act.toString().equals(actString)) {
                     return act;
                 }
             }

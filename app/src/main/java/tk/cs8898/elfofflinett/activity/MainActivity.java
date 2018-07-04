@@ -32,7 +32,9 @@ import java.util.Set;
 import tk.cs8898.elfofflinett.R;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
 import tk.cs8898.elfofflinett.model.entity.InternalActEntity;
+import tk.cs8898.elfofflinett.receiver.AlarmReceiver;
 import tk.cs8898.elfofflinett.services.FetchTimeTableService;
+//import tk.cs8898.elfofflinett.services.NotificationService;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,6 +91,7 @@ public class MainActivity extends AppCompatActivity
         filterMenu = navigationView.getMenu().findItem(R.id.nav_filter_menu).getSubMenu();
 
         FetchTimeTableService.startActionFetchTimetable(this, JSON_URL);
+        AlarmReceiver.start(this);
     }
 
     @Override

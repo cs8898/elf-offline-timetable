@@ -32,6 +32,7 @@ public class FetchTimeTableService extends IntentService {
     private static final String ACTION_FETCH_TIMETABLE = "tk.cs8898.elfofflinett.action.fetchtimetable";
     private static final String EXTRA_URL = "tk.cs8898.elfofflinett.extra.url";
     private static final String EXTRA_OFFLINE = "tk.cs8898.elfofflinett.extra.offline";
+    private static final String EXTRA_UPDATE = "tk.cs8898.elfofflinett.extra.update";
     private static final String LOCAL_FILE = "elfofflinett.json";
 
     public FetchTimeTableService() {
@@ -45,14 +46,15 @@ public class FetchTimeTableService extends IntentService {
      * @see IntentService
      */
     public static void startActionFetchTimetable(Context context, String url) {
-        startActionFetchTimetable(context, url, false);
+        startActionFetchTimetable(context, url, false, true);
     }
 
-    private static void startActionFetchTimetable(Context context, String url, boolean offline) {
+    public static void startActionFetchTimetable(Context context, String url, boolean offline, boolean update) {
         Intent intent = new Intent(context, FetchTimeTableService.class);
         intent.setAction(ACTION_FETCH_TIMETABLE);
         intent.putExtra(EXTRA_URL, url);
         intent.putExtra(EXTRA_OFFLINE, offline);
+        intent.putExtra(EXTRA_UPDATE, update);
         context.startService(intent);
     }
 
@@ -63,7 +65,8 @@ public class FetchTimeTableService extends IntentService {
             if (ACTION_FETCH_TIMETABLE.equals(action)) {
                 final String url = intent.getStringExtra(EXTRA_URL);
                 final boolean offline = intent.getBooleanExtra(EXTRA_OFFLINE, false);
-                handleActionFetchTimetable(url, offline);
+                final boolean update = intent.getBooleanExtra(EXTRA_UPDATE, false);
+                handleActionFetchTimetable(url, offline, update);
             }
         }
     }
@@ -72,7 +75,7 @@ public class FetchTimeTableService extends IntentService {
      * Handle action Fetch Timetable in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionFetchTimetable(String url, boolean offline) {
+    private void handleActionFetchTimetable(String url, boolean offline, boolean update) {
         if (!offline && Common.isOnline(getApplicationContext())) {
             OkHttpClient okHttpClient = new OkHttpClient();
 
@@ -109,7 +112,7 @@ public class FetchTimeTableService extends IntentService {
             Gson gson = new Gson();
 
             StageEntity[] stages = gson.fromJson(jsonBody, StageEntity[].class);
-            MarkedActsService.setAllActs(getApplicationContext(),stages);
+            MarkedActsService.setAllActs(getApplicationContext(),stages, update);
             Log.d("FetchTimeTableService", "fetched " + stages.length + " stages");
 
         } catch (FileNotFoundException e) {
