@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import tk.cs8898.elfofflinett.R;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 mWeekView.goToToday();
+                mWeekView.goToHour(Calendar.getInstance(Locale.GERMANY).get(Calendar.HOUR_OF_DAY));
             }
         });
 
