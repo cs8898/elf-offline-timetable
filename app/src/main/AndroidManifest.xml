@@ -34,6 +34,10 @@
             android:name=".services.FetchTimeTableService"
             android:exported="false" />
 
+        <service
+            android:name=".services.NotificationService"
+            android:exported="false" />
+
         <receiver
             android:name=".receiver.AutostartReceiver"
             android:enabled="true"
@@ -47,7 +51,7 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="tk.cs8898.elfofflinett.action.initnotification" />
+                <action android:name="tk.cs8898.elfofflinett.alarm.initnotification" />
             </intent-filter>
         </receiver>
     </application>

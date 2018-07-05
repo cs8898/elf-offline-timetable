@@ -5,7 +5,6 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -32,8 +31,8 @@ import java.util.Set;
 import tk.cs8898.elfofflinett.R;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
 import tk.cs8898.elfofflinett.model.entity.InternalActEntity;
-import tk.cs8898.elfofflinett.receiver.AlarmReceiver;
 import tk.cs8898.elfofflinett.services.FetchTimeTableService;
+import tk.cs8898.elfofflinett.services.NotificationService;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         filterMenu = navigationView.getMenu().findItem(R.id.nav_filter_menu).getSubMenu();
 
         FetchTimeTableService.startActionFetchTimetable(this, JSON_URL);
-        AlarmReceiver.start(this);
+        NotificationService.startActionInitNotification(this);
     }
 
     @Override
@@ -182,7 +181,7 @@ public class MainActivity extends AppCompatActivity
                 act.setMarked(!act.isMarked());
                 mWeekView.notifyDatasetChanged();
                 MarkedActsService.saveMarks(getApplicationContext());
-                AlarmReceiver.start(getApplicationContext());
+                NotificationService.startActionInitNotification(getApplicationContext());
             }
         }
 
