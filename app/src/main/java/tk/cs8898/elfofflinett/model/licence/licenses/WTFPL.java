@@ -30,19 +30,11 @@ public class WTFPL implements ILicense {
 
     @Override
     public String getLicenseText() {
-        return "            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\n" +
-                "                    Version 2, December 2004\n" +
-                "\n" +
-                " Copyright (C) "+this.copyright+"\n" +
-                "\n" +
-                " Everyone is permitted to copy and distribute verbatim or modified\n" +
-                " copies of this license document, and changing it is allowed as long\n" +
-                " as the name is changed.\n" +
-                "\n" +
-                "            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\n" +
-                "   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION\n" +
-                "\n" +
-                "  0. You just DO WHAT THE FUCK YOU WANT TO.\n" +
-                "\n";
+        return " Copyright (C) " + this.copyright + "\n" +
+                " This program is free software. It comes without any warranty, to\n" +
+                " the extent permitted by applicable law.You can redistribute it\n" +
+                " and/or modify it under the terms of the Do What The Fuck You Want\n" +
+                " To Public License, Version 2, as published by Sam Hocevar. See\n" +
+                " http://www.wtfpl.net/ for more details.";
     }
 }
