@@ -5,6 +5,7 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity
         mWeekView.setOnEventClickListener(mWeekViewListener);
         mWeekView.setMonthChangeListener(mWeekViewListener);
         mWeekView.setEventLongPressListener(mWeekViewListener);
+        mWeekView.goToHour(Calendar.getInstance(Locale.GERMANY).get(Calendar.HOUR_OF_DAY));
 
         MarkedActsService.setWeekView(mWeekView);
 
@@ -167,7 +169,8 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onEventClick(WeekViewEvent event, RectF eventRect) {
-            toggleEvent(event.getIdentifier());
+            if (ALL_VIEW.equals(currentView))
+                toggleEvent(event.getIdentifier());
         }
 
         @Override
@@ -203,21 +206,25 @@ public class MainActivity extends AppCompatActivity
             Collection<InternalActEntity> acts;
             switch (currentView) {
                 case MARKED_VIEW:
+                    //Log.d("MainActivity", "Marked View");
                     acts = MarkedActsService.getMarked();
                     break;
                 case ALL_VIEW:
+                    //Log.d("MainActivity", "All View");
                     acts = MarkedActsService.getActs();
                     break;
                 default:
+                    Log.e("MainActivity", "No Current view was set");
                     acts = new ArrayList<>();
                     break;
             }
+            //Log.d("MainActivity", "Loading events for " + newYear + "-" + newMonth);
             List<WeekViewEvent> eventsList = new ArrayList<>();
             for (InternalActEntity act : acts) {
                 Calendar actStart = act.getTime();
                 Calendar actEnd = act.getEnd();
                 if (actStart != null && actEnd != null) {
-                    if (actStart.get(Calendar.YEAR) == newYear && actStart.get(Calendar.MONTH) == newMonth) {
+                    if (actStart.get(Calendar.YEAR) == newYear && actStart.get(Calendar.MONTH) == newMonth - 1) {
                         //FILTERS
                         if (filters.contains(act.getLocation()))
                             continue;

@@ -73,6 +73,7 @@ public class MarkedActsService {
                 public void run() {
                     weekView.setMinDate(getMinDate());
                     weekView.setMaxDate(getMaxDate());
+                    weekView.invalidate();
                     weekView.notifyDatasetChanged();
                 }
             });
