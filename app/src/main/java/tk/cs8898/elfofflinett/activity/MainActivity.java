@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity
         public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
             //return null;
             //List<WeekViewEvent> events = getEvents(newYear, newMonth);
-            poulateFilters();
+            populateFilters();
             Collection<InternalActEntity> acts;
             switch (currentView) {
                 case MARKED_VIEW:
@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void poulateFilters() {
+    private void populateFilters() {
         filterMenu.clear();
         //filters.clear();
         int i = 0;
