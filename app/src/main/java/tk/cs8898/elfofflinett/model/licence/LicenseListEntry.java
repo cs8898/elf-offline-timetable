@@ -21,7 +21,7 @@ public class LicenseListEntry {
     @SuppressWarnings("SpellCheckingInspection")
     public static List<LicenseListEntry> getUsedLicenses() {
         ArrayList<ILicense> licenses = new ArrayList<>();
-        licenses.add(new WTFPL("ELF Offline TimeTable", "https://github.com/cs8898/elf-offline-timetable"));
+        licenses.add(new WTFPL("ELF Offline TimeTable", "https://github.com/cs8898/elf-offline-timetable", "2018 Christian Schmied"));
         licenses.add(new GenericLicense("google-gson", "https://github.com/google/gson","Copyright 2008 Google Inc.\n" +
                 "\n" +
                 "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
@@ -48,7 +48,7 @@ public class LicenseListEntry {
                 "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
                 "See the License for the specific language governing permissions and\n" +
                 "limitations under the License."));
-        licenses.add(new GenericLicense("Android Week View","https://github.com/alamkanak/Android-Week-View","Copyright 2014 Raquib-ul-Alam\n" +
+        licenses.add(new GenericLicense("Android Week View","https://github.com/Quivr/Android-Week-View","Copyright 2014 Raquib-ul-Alam\n" +
                 "\n" +
                 "Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
                 "you may not use this file except in compliance with the License.\n" +

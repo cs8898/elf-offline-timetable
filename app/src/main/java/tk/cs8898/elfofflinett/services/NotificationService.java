@@ -126,7 +126,7 @@ public class NotificationService extends IntentService {
     /**
      * removes the old notification and adds the new one
      *
-     * @param actString
+     * @param actString the act for the notification
      */
     private void handleActionTriggerNotification(String actString) {
         if (MarkedActsService.getActs().size() == 0) {

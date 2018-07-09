@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity
 
     private WeekView mWeekView;
 
-    private static final String JSON_URL = "https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/elf18tt_min.json";
     private String currentView;
     private SubMenu filterMenu;
 
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentView = MARKED_VIEW;
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -84,6 +82,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        currentView = navigationView.getMenu().findItem(R.id.nav_home).isChecked() ? MARKED_VIEW : ALL_VIEW;
 
         filters = new HashSet<>();
         filterMenu = navigationView.getMenu().findItem(R.id.nav_filter_menu).getSubMenu();
@@ -120,8 +120,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_refresh) {
             FetchTimeTableService.startActionFetchTimetable(this);
             return true;
-        }else if(id == R.id.action_change_daycount){
-            mWeekView.setNumberOfVisibleDays(mWeekView.getNumberOfVisibleDays()%3+1);
+        } else if (id == R.id.action_change_daycount) {
+            mWeekView.setNumberOfVisibleDays(mWeekView.getNumberOfVisibleDays() % 3 + 1);
         }
 
         return super.onOptionsItemSelected(item);
@@ -167,15 +167,25 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onEventClick(WeekViewEvent event, RectF eventRect) {
-            toggleEvent(event.getId());
+            toggleEvent(event.getIdentifier());
         }
 
         @Override
         public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-            toggleEvent(event.getId());
+            toggleEvent(event.getIdentifier());
         }
 
-        private void toggleEvent(long id){
+        private void toggleEvent(String identifier) {
+            InternalActEntity act = MarkedActsService.findAct(identifier);
+            if (act != null) {
+                act.setMarked(!act.isMarked());
+                mWeekView.notifyDatasetChanged();
+                MarkedActsService.saveMarks(getApplicationContext());
+                NotificationService.startActionInitNotification(getApplicationContext());
+            }
+        }
+
+        private void toggleEvent(long id) {
             InternalActEntity act = MarkedActsService.findAct(id);
             if (act != null) {
                 act.setMarked(!act.isMarked());
@@ -211,7 +221,7 @@ public class MainActivity extends AppCompatActivity
                         //FILTERS
                         if (filters.contains(act.getLocation()))
                             continue;
-                        WeekViewEvent event = new WeekViewEvent(act.getId(), act.getName(), act.getLocation(), actStart, actEnd);
+                        WeekViewEvent event = new WeekViewEvent(act.toString(), act.getName(), act.getLocation(), actStart, actEnd);
                         event.setColor(act.getColor(getApplicationContext()));
                         eventsList.add(event);
                     }
@@ -237,8 +247,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDestroy(){
-        MarkedActsService.saveMarks(getApplicationContext(),true);
+    public void onDestroy() {
+        MarkedActsService.saveMarks(getApplicationContext(), true);
         super.onDestroy();
     }
 }

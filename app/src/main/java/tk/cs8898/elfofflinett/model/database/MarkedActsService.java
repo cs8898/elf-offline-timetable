@@ -9,6 +9,7 @@ import android.util.Log;
 import com.alamkanak.weekview.WeekView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -65,19 +66,21 @@ public class MarkedActsService {
             }
         }
         loadMarks(context);
-        if(update) {
+        if (update) {
             Handler mainHandler = new Handler(context.getMainLooper());
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    weekView.setMinDate(getMinDate());
+                    weekView.setMaxDate(getMaxDate());
                     weekView.notifyDatasetChanged();
                 }
             });
         }
     }
 
-    public static void saveMarks(Context context){
-        saveMarks(context,false);
+    public static void saveMarks(Context context) {
+        saveMarks(context, false);
     }
 
     @SuppressLint("ApplySharedPref")
@@ -95,9 +98,9 @@ public class MarkedActsService {
             SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
             Set<String> markSet = preferences.getStringSet(MARKED_NAME, new HashSet<String>());
             for (String marked : markSet) {
-                Log.d("MarkedActsService","Marking "+marked);
-                for(InternalActEntity act: acts){
-                    if(act.toString().equals(marked)) {
+                Log.d("MarkedActsService", "Marking " + marked);
+                for (InternalActEntity act : acts) {
+                    if (act.toString().equals(marked)) {
                         act.setMarked(true);
                         break;
                     }
@@ -137,5 +140,25 @@ public class MarkedActsService {
                 locations.add(act.getLocation());
             }
         return locations;
+    }
+
+    public static Calendar getMinDate() {
+        Calendar min = null;
+        for (InternalActEntity act : acts) {
+            if (min == null || act.getTime().before(min)) {
+                min = act.getTime();
+            }
+        }
+        return min;
+    }
+
+    public static Calendar getMaxDate() {
+        Calendar max = null;
+        for (InternalActEntity act : acts) {
+            if (max == null || act.getEnd().after(max)) {
+                max = act.getEnd();
+            }
+        }
+        return max;
     }
 }
