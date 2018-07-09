@@ -25,7 +25,7 @@ android {
         applicationId "tk.cs8898.elfofflinett"
         minSdkVersion 16
         targetSdkVersion 27
-	versionCode 3
+	versionCode appVersionCode as Integer
 	versionName "1.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true

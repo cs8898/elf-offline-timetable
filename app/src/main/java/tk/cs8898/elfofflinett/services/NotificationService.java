@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import tk.cs8898.elfofflinett.R;
+import tk.cs8898.elfofflinett.activity.MainActivity;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
 import tk.cs8898.elfofflinett.model.entity.InternalActEntity;
 import tk.cs8898.elfofflinett.receiver.AlarmReceiver;
@@ -68,9 +69,12 @@ public class NotificationService extends IntentService {
         }
     }
 
+    /**
+     * Removes an old timer and adds a new one
+     */
     private void handleActionInitNotification() {
         if (MarkedActsService.getActs().size() == 0) {
-            FetchTimeTableService.startActionFetchTimetable(getApplicationContext(), "", true, false);
+            FetchTimeTableService.startActionFetchTimetable(getApplicationContext(), true, false);
             //IMPLEMENT Observer
             do {
                 try {
@@ -93,7 +97,7 @@ public class NotificationService extends IntentService {
         assert alarmManager != null;
         if (actString.length() != 0) {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            //REMOVE TIMER
+            //REMOVE OLD TIMER
             alarmManager.cancel(pendingIntent);
         }
 
@@ -119,14 +123,14 @@ public class NotificationService extends IntentService {
         }
     }
 
+    /**
+     * removes the old notification and adds the new one
+     *
+     * @param actString
+     */
     private void handleActionTriggerNotification(String actString) {
         if (MarkedActsService.getActs().size() == 0) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            FetchTimeTableService.startActionFetchTimetable(getApplicationContext(), "", true, false);
+            FetchTimeTableService.startActionFetchTimetable(getApplicationContext(), true, false);
             do {
                 try {
                     Thread.sleep(1000);
@@ -152,28 +156,25 @@ public class NotificationService extends IntentService {
                     .append(act.getName()).append("\n");
         }
 
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        assert notificationManager != null;
+
         Notification.Builder notificationBuilder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager mNotificationManager =
-                    (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            assert mNotificationManager != null;
-            mNotificationManager.createNotificationChannel(new NotificationChannel(NOTIFICATION_CHAN_ID, NOTIFICATION_CHAN_NAME, NotificationManager.IMPORTANCE_DEFAULT));
+            if (notificationManager.getNotificationChannel(NOTIFICATION_CHAN_ID) == null)
+                notificationManager.createNotificationChannel(new NotificationChannel(NOTIFICATION_CHAN_ID, NOTIFICATION_CHAN_NAME, NotificationManager.IMPORTANCE_DEFAULT));
             notificationBuilder = new Notification.Builder(getApplicationContext(), NOTIFICATION_CHAN_ID);
-
         } else {
             notificationBuilder = new Notification.Builder(getApplicationContext());
         }
         PendingIntent notificationIntent = PendingIntent.getActivity(getApplicationContext(), 0,
-                new Intent(), 0);
+                new Intent(getApplicationContext(),MainActivity.class), 0);
         notificationBuilder = notificationBuilder.setContentTitle("Currently on Stage")
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentText(notificationBody.toString())
                 .setContentIntent(notificationIntent);
-
-        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        assert notificationManager != null;
-        notificationManager.cancel(NOTIFICATION_ID);
+        //notificationManager.cancel(NOTIFICATION_ID); //Theoretical can be ignored
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
-        handleActionInitNotification();
+        startActionInitNotification(getApplicationContext());
     }
 }

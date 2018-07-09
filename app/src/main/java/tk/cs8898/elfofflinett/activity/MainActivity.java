@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         filters = new HashSet<>();
         filterMenu = navigationView.getMenu().findItem(R.id.nav_filter_menu).getSubMenu();
 
-        FetchTimeTableService.startActionFetchTimetable(this, JSON_URL);
+        FetchTimeTableService.startActionFetchTimetable(this);
         NotificationService.startActionInitNotification(this);
     }
 
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            FetchTimeTableService.startActionFetchTimetable(this, JSON_URL);
+            FetchTimeTableService.startActionFetchTimetable(this);
             return true;
         }else if(id == R.id.action_change_daycount){
             mWeekView.setNumberOfVisibleDays(mWeekView.getNumberOfVisibleDays()%3+1);

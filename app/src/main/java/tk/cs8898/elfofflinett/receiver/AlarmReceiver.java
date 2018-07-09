@@ -24,19 +24,11 @@ public class AlarmReceiver extends BroadcastReceiver {
             final String actString = intent.getStringExtra(EXTRA_ACT);
             if (actString == null || actString.length() == 0)
                 return;
-            new Thread() {
-                @Override
-                        public void run() {
-                    NotificationService.startActionTriggerNotification(context, actString);
-                }
-            }.start();
+            NotificationService.startActionTriggerNotification(context, actString);
+
         } else if (ALARM_INIT_NOTIFICATION.equals(intent.getAction())) {
-            new Thread() {
-                @Override
-                public void run() {
-                    NotificationService.startActionInitNotification(context);
-                }
-            }.start();
+            NotificationService.startActionInitNotification(context);
+
         }
     }
 }
