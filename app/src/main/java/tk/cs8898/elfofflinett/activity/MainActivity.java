@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +31,8 @@ import java.util.Locale;
 import java.util.Set;
 
 import tk.cs8898.elfofflinett.R;
+import tk.cs8898.elfofflinett.model.bus.BusProvider;
+import tk.cs8898.elfofflinett.model.bus.messages.MessageDatasetChanged;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
 import tk.cs8898.elfofflinett.model.entity.InternalActEntity;
 import tk.cs8898.elfofflinett.services.FetchTimeTableService;
@@ -63,16 +66,12 @@ public class MainActivity extends AppCompatActivity
         mWeekView.setOnEventClickListener(mWeekViewListener);
         mWeekView.setMonthChangeListener(mWeekViewListener);
         mWeekView.setEventLongPressListener(mWeekViewListener);
-        mWeekView.goToHour(Calendar.getInstance(Locale.GERMANY).get(Calendar.HOUR_OF_DAY));
-
-        MarkedActsService.setWeekView(mWeekView);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mWeekView.goToToday();
-                mWeekView.goToHour(Calendar.getInstance(Locale.GERMANY).get(Calendar.HOUR_OF_DAY));
+                goToToday();
             }
         });
 
@@ -89,9 +88,21 @@ public class MainActivity extends AppCompatActivity
 
         filters = new HashSet<>();
         filterMenu = navigationView.getMenu().findItem(R.id.nav_filter_menu).getSubMenu();
+    }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        BusProvider.getInstance().register(this);
         FetchTimeTableService.startActionFetchTimetable(this);
         NotificationService.startActionInitNotification(this);
+        goToToday();
+    }
+
+    @Override
+    public void onPause(){
+        BusProvider.getInstance().unregister(this);
+        super.onPause();
     }
 
     @Override
@@ -188,16 +199,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        private void toggleEvent(long id) {
-            InternalActEntity act = MarkedActsService.findAct(id);
-            if (act != null) {
-                act.setMarked(!act.isMarked());
-                mWeekView.notifyDatasetChanged();
-                MarkedActsService.saveMarks(getApplicationContext());
-                NotificationService.startActionInitNotification(getApplicationContext());
-            }
-        }
-
         @Override
         public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
             //return null;
@@ -253,9 +254,37 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void goToToday(){
+        Calendar now = Calendar.getInstance(Locale.GERMANY);
+        if(mWeekView.getMinDate()!=null && now.before(mWeekView.getMinDate())){
+            mWeekView.goToDate(mWeekView.getMinDate());
+        }else if(mWeekView.getMaxDate()!=null && now.after(mWeekView.getMaxDate())){
+            mWeekView.goToDate(mWeekView.getMaxDate());
+        }else{
+            mWeekView.goToDate(now);
+            mWeekView.goToHour(now.get(Calendar.HOUR_OF_DAY));
+        }
+    }
+
+    @Subscribe
+    public void onDatasetChanged(MessageDatasetChanged message){
+        if(!message.getOrigin().equals(MainActivity.class)){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mWeekView.setMinDate(MarkedActsService.getMinDate());
+                    mWeekView.setMaxDate(MarkedActsService.getMaxDate());
+                    mWeekView.invalidate();
+                    mWeekView.notifyDatasetChanged();
+                }
+            });
+        }
+    }
+
     @Override
     public void onDestroy() {
         MarkedActsService.saveMarks(getApplicationContext(), true);
+        BusProvider.getInstance().unregister(this);
         super.onDestroy();
     }
 }

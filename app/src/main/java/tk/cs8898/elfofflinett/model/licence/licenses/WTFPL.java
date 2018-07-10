@@ -1,13 +1,12 @@
 package tk.cs8898.elfofflinett.model.licence.licenses;
 
-@SuppressWarnings("SpellCheckingInspection")
 public class WTFPL implements ILicense {
     private static final String NAME = "WTFPL";
 
     private final String name, url;
     private final String copyright;
 
-    public WTFPL(String name, String url, String copyright) {
+    public WTFPL(String copyright, String name, String url) {
         this.name = name;
         this.url = url;
         this.copyright = copyright;

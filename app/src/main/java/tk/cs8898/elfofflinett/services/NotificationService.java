@@ -10,6 +10,9 @@ import android.content.Intent;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
+
+import com.squareup.otto.Subscribe;
 
 import java.util.Calendar;
 import java.util.HashSet;
@@ -19,6 +22,8 @@ import java.util.TimeZone;
 
 import tk.cs8898.elfofflinett.R;
 import tk.cs8898.elfofflinett.activity.MainActivity;
+import tk.cs8898.elfofflinett.model.bus.BusProvider;
+import tk.cs8898.elfofflinett.model.bus.messages.MessageDatasetReady;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
 import tk.cs8898.elfofflinett.model.entity.InternalActEntity;
 import tk.cs8898.elfofflinett.receiver.AlarmReceiver;
@@ -38,6 +43,8 @@ public class NotificationService extends IntentService {
     private static final int NOTIFICATION_ID = 889810;
 
     private static final String EXTRA_ACT = "tk.cs8898.elfofflinett.extra.act";
+
+    private final Object waitTimeTableLock = new Object();
 
     public NotificationService() {
         super("NotificationService");
@@ -59,6 +66,7 @@ public class NotificationService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
+            BusProvider.getInstance().register(this);
             final String action = intent.getAction();
             if (ACTION_INIT_NOTIFICATION.equals(action)) {
                 handleActionInitNotification();
@@ -66,7 +74,9 @@ public class NotificationService extends IntentService {
                 final String actString = intent.getStringExtra(EXTRA_ACT);
                 handleActionTriggerNotification(actString);
             }
+            BusProvider.getInstance().unregister(this);
         }
+        stopSelf();
     }
 
     /**
@@ -75,14 +85,11 @@ public class NotificationService extends IntentService {
     private void handleActionInitNotification() {
         if (MarkedActsService.getActs().size() == 0) {
             FetchTimeTableService.startActionFetchTimetable(getApplicationContext(), true, false);
-            //IMPLEMENT Observer
-            do {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } while (MarkedActsService.getActs().size() == 0);
+            try {
+                waitForTimeTable();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         //FETCH LAST NOTIFICATION FOR DELETE
@@ -120,6 +127,10 @@ public class NotificationService extends IntentService {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, minStart.getTime().getTimeInMillis(), pendingIntent);
             }
             preferences.edit().putString(PREF_NOTIFICATIONACT_NAME, minStart.toString()).apply();
+            Log.d("NotificationService","Added new Timer");
+        }else{
+            preferences.edit().remove(PREF_NOTIFICATIONACT_NAME).apply();
+            Log.d("NotificationService","No New Timer to be set");
         }
     }
 
@@ -128,24 +139,27 @@ public class NotificationService extends IntentService {
      *
      * @param actString the act for the notification
      */
+    //TODO Change implementation to some Time Value when a change in the notification is required
     private void handleActionTriggerNotification(String actString) {
+        Log.d(NotificationService.class.getSimpleName(),"Triggered Notification "+actString);
         if (MarkedActsService.getActs().size() == 0) {
             FetchTimeTableService.startActionFetchTimetable(getApplicationContext(), true, false);
-            do {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } while (MarkedActsService.getActs().size() == 0);
+            try {
+                waitForTimeTable();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
+        Log.d(NotificationService.class.getSimpleName(),"Populated Acts");
         InternalActEntity intentAct = MarkedActsService.findAct(actString);
         if (intentAct == null)
             return;
 
+        Log.d(NotificationService.class.getSimpleName(),"Found Act");
+
         Set<InternalActEntity> currentActs = new HashSet<>();
-        for (InternalActEntity act : MarkedActsService.getMarked()) {
+        for (InternalActEntity act : MarkedActsService.getMarked()) {//TODO Change to also running acts
             if (act.getTime().compareTo(intentAct.getTime()) == 0) {
                 currentActs.add(act);
             }
@@ -175,6 +189,23 @@ public class NotificationService extends IntentService {
                 .setContentIntent(notificationIntent);
         //notificationManager.cancel(NOTIFICATION_ID); //Theoretical can be ignored
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
+        Log.d(NotificationService.class.getSimpleName(),"Finished Sending the Notification");
         startActionInitNotification(getApplicationContext());
+    }
+
+    private void waitForTimeTable() throws InterruptedException{
+        synchronized (waitTimeTableLock){
+            waitTimeTableLock.notify();
+            waitTimeTableLock.wait();
+        }
+    }
+
+    @Subscribe
+    public void onDatasetReady(MessageDatasetReady message){
+        if(message.getOrigin().equals(FetchTimeTableService.class)){
+            synchronized (waitTimeTableLock) {
+                waitTimeTableLock.notify();
+            }
+        }
     }
 }
