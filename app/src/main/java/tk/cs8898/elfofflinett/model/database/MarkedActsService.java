@@ -116,8 +116,8 @@ public class MarkedActsService {
                         return act;
                     }
                 }
-            return null;
         }
+        return null;
     }
 
     public static InternalActEntity findAct(String actString) {
