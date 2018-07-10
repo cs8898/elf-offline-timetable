@@ -8,11 +8,9 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,6 +18,8 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import tk.cs8898.elfofflinett.R;
 import tk.cs8898.elfofflinett.model.Common;
+import tk.cs8898.elfofflinett.model.bus.BusProvider;
+import tk.cs8898.elfofflinett.model.bus.messages.MessageDatasetReady;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
 import tk.cs8898.elfofflinett.model.entity.StageEntity;
 
@@ -67,6 +67,7 @@ public class FetchTimeTableService extends IntentService {
                 handleActionFetchTimetable(url, offline, update);
             }
         }
+        stopSelf();
     }
 
     /**
@@ -74,11 +75,14 @@ public class FetchTimeTableService extends IntentService {
      * parameters.
      */
     private void handleActionFetchTimetable(String url, boolean offline, boolean update) {
-        loadOffline(update);
+        if(!loadOffline(update)){
+            offline=false;
+        }
         if (!offline && Common.isOnline(getApplicationContext())) {
             if(fetchOnline(url))
                 loadOffline(update);
         }
+        BusProvider.getInstance().post(new MessageDatasetReady(FetchTimeTableService.class));
     }
 
     private boolean fetchOnline(String url) {

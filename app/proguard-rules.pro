@@ -21,7 +21,7 @@
 #-renamesourcefileattribute SourceFile
 
 
-##---------------Begin: proguard configuration for OKHTTP3  ----------
+##---------------Begin: proguard configuration for OKHTTP3  -------
 # JSR 305 annotations are for embedding nullability information.
 -dontwarn javax.annotation.**
 
@@ -34,7 +34,15 @@
 # OkHttp platform used only on JVM and when Conscrypt dependency is available.
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
 
-##---------------End: proguard configuration for OKHTTP3  ----------
+##---------------End: proguard configuration for OKHTTP3  ---------
+
+##---------------Begin: proguard configuration for OTTO  ----------
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @com.squareup.otto.Subscribe public *;
+    @com.squareup.otto.Produce public *;
+}
+##---------------End: proguard configuration for OTTO  ------------
 
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
@@ -57,4 +65,4 @@
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
 
-##---------------End: proguard configuration for Gson  ----------
+##---------------End: proguard configuration for Gson  ------------
