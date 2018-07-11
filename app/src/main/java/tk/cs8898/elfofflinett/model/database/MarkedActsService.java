@@ -136,7 +136,7 @@ public class MarkedActsService {
         HashSet<String> locations = new HashSet<>();
 
         synchronized (actsLock) {
-        if (acts != null)
+            if (acts != null)
                 for (InternalActEntity act : acts) {
                     locations.add(act.getLocation());
                 }
