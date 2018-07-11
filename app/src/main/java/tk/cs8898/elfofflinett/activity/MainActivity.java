@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TimeZone;
 
 import tk.cs8898.elfofflinett.R;
 import tk.cs8898.elfofflinett.model.bus.BusProvider;
@@ -88,21 +89,27 @@ public class MainActivity extends AppCompatActivity
 
         filters = new HashSet<>();
         filterMenu = navigationView.getMenu().findItem(R.id.nav_filter_menu).getSubMenu();
+        NotificationService.startActionInitNotification(this);
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        BusProvider.getInstance().register(this);
-        FetchTimeTableService.startActionFetchTimetable(this);
-        NotificationService.startActionInitNotification(this);
+        //NotificationService.startActionTriggerNotification(this,Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"),Locale.GERMANY).getTimeInMillis());
         goToToday();
     }
 
     @Override
-    public void onPause(){
-        BusProvider.getInstance().unregister(this);
+    public void onResume(){
+        super.onResume();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public void onPause() {
         super.onPause();
+        MarkedActsService.saveMarks(getApplicationContext(), true);
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -255,7 +262,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void goToToday(){
-        Calendar now = Calendar.getInstance(Locale.GERMANY);
+        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"), Locale.GERMANY);
         if(mWeekView.getMinDate()!=null && now.before(mWeekView.getMinDate())){
             mWeekView.goToDate(mWeekView.getMinDate());
         }else if(mWeekView.getMaxDate()!=null && now.after(mWeekView.getMaxDate())){
@@ -279,12 +286,5 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        MarkedActsService.saveMarks(getApplicationContext(), true);
-        BusProvider.getInstance().unregister(this);
-        super.onDestroy();
     }
 }
