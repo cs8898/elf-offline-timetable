@@ -116,7 +116,7 @@ public class NotificationLogic {
                 builder.setExtras(extras);
                 builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                         .setMinimumLatency(delayTime)
-                        .setOverrideDeadline(Common.ONE_MIN)
+                        .setOverrideDeadline(delayTime+Common.ONE_MIN)
                         .setRequiresCharging(false)
                         .setRequiresDeviceIdle(false);
                 jobScheduler.schedule(builder.build());
