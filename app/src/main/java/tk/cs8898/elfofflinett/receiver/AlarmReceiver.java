@@ -7,20 +7,23 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.PersistableBundle;
 
+import tk.cs8898.elfofflinett.model.Common;
 import tk.cs8898.elfofflinett.services.NotificationService;
 
 public class AlarmReceiver extends BroadcastReceiver {
     public static final String ALARM_TRIGGER_NOTIFICATION = "tk.cs8898.elfofflinett.alarm.triggernotification";
     public static final String EXTRA_TIME = "tk.cs8898.elfofflinett.extra.time";
 
+    //SHOULD BE IMPLEMENTED ONLY FOR < LOLLIPOP
     @Override
     public void onReceive(final Context context, Intent intent) {
         if (ALARM_TRIGGER_NOTIFICATION.equals(intent.getAction())) {
             final long time = intent.getLongExtra(EXTRA_TIME, -1);
             if (time != -1) {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
                     assert jobScheduler != null;
                     ComponentName serviceComponent = new ComponentName(context, NotificationService.ScheduledNotificationService.class);
@@ -30,7 +33,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     extras.putLong(NotificationService.ScheduledNotificationService.EXTRA_TIME,time);
                     builder.setExtras(extras);
                     builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                            .setRequiresBatteryNotLow(false)
+                            .setOverrideDeadline(Common.ONE_MIN)
                             .setRequiresCharging(false)
                             .setRequiresDeviceIdle(false);
                     jobScheduler.schedule(builder.build());

@@ -80,7 +80,7 @@ public class NotificationService extends IntentService {
         stopSelf();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static class ScheduledNotificationService extends JobService {
         public static final int INIT_JOB_ID = 889820;
         public static final int NOTIFY_JOB_ID = 889821;

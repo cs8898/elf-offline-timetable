@@ -4,10 +4,14 @@ import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.PersistableBundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -21,6 +25,7 @@ import java.util.TimeZone;
 
 import tk.cs8898.elfofflinett.R;
 import tk.cs8898.elfofflinett.activity.MainActivity;
+import tk.cs8898.elfofflinett.model.Common;
 import tk.cs8898.elfofflinett.model.bus.BusProvider;
 import tk.cs8898.elfofflinett.model.bus.messages.MessageDatasetReady;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
@@ -60,16 +65,22 @@ public class NotificationLogic {
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
         long lastTriggerTime = preferences.getLong(PREF_NOTIFICATIONTRIGGER_TIME, -1);
 
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        intent.setAction(AlarmReceiver.ALARM_TRIGGER_NOTIFICATION);
-        intent.putExtra(AlarmReceiver.EXTRA_TIME, lastTriggerTime);
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        assert alarmManager != null;
-        //REMOVE OLD TIMER
-        if (lastTriggerTime != -1) {
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManager.cancel(pendingIntent);
+        //DELETE LAST TRIGGER
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            assert jobScheduler != null;
+            jobScheduler.cancel(NotificationService.ScheduledNotificationService.NOTIFY_JOB_ID);
+        } else {
+            //REMOVE OLD TIMER
+            if (lastTriggerTime != -1) {
+                Intent intent = new Intent(context, AlarmReceiver.class);
+                intent.setAction(AlarmReceiver.ALARM_TRIGGER_NOTIFICATION);
+                intent.putExtra(AlarmReceiver.EXTRA_TIME, lastTriggerTime);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                assert alarmManager != null;
+                alarmManager.cancel(pendingIntent);
+            }
         }
 
         long newTriggerTime = Long.MAX_VALUE;
@@ -90,17 +101,41 @@ public class NotificationLogic {
             }
         }
         Log.d("NotificationService", "New minTimestamp is " + (newTriggerTime == Long.MAX_VALUE ? "MAX" : newTriggerTime));
+
         if (newTriggerTime != Long.MAX_VALUE) {
-            //START NEW TIMER
-            intent.putExtra(EXTRA_TIME, newTriggerTime);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, newTriggerTime, pendingIntent);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                long delayTime = newTriggerTime-Calendar.getInstance(TimeZone.getTimeZone("Berlin/Germany"),Locale.GERMANY).getTimeInMillis();
+                JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                assert jobScheduler != null;
+
+                ComponentName serviceComponent = new ComponentName(context, NotificationService.ScheduledNotificationService.class);
+
+                JobInfo.Builder builder = new JobInfo.Builder(NotificationService.ScheduledNotificationService.NOTIFY_JOB_ID,serviceComponent);
+                PersistableBundle extras = new PersistableBundle();
+                extras.putLong(NotificationService.ScheduledNotificationService.EXTRA_TIME,newTriggerTime);
+                builder.setExtras(extras);
+                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                        .setMinimumLatency(delayTime)
+                        .setOverrideDeadline(Common.ONE_MIN)
+                        .setRequiresCharging(false)
+                        .setRequiresDeviceIdle(false);
+                jobScheduler.schedule(builder.build());
             } else {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, newTriggerTime, pendingIntent);
+                //START NEW TIMER
+                Intent intent = new Intent(context, AlarmReceiver.class);
+                intent.setAction(AlarmReceiver.ALARM_TRIGGER_NOTIFICATION);
+                intent.putExtra(AlarmReceiver.EXTRA_TIME, newTriggerTime);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                assert alarmManager != null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, newTriggerTime, pendingIntent);
+                } else {
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, newTriggerTime, pendingIntent);
+                }
+                preferences.edit().putLong(PREF_NOTIFICATIONTRIGGER_TIME, newTriggerTime).apply();
+                Log.d("NotificationService", "Added new Timer for " + newTriggerTime);
             }
-            preferences.edit().putLong(PREF_NOTIFICATIONTRIGGER_TIME, newTriggerTime).apply();
-            Log.d("NotificationService", "Added new Timer for " + newTriggerTime);
         } else {
             preferences.edit().remove(PREF_NOTIFICATIONTRIGGER_TIME).apply();
             Log.d("NotificationService", "No New Timer to be set");
@@ -119,7 +154,7 @@ public class NotificationLogic {
         if (MarkedActsService.getActs().size() == 0) {
             BusProvider.getInstance().register(this);
             //FetchTimeTableService.startActionFetchTimetable(context, true, false);
-            FetchTimeTableLogic.getThreadActionFetchTimetable(context,context.getString(R.string.timetable_url),true,false).start();
+            FetchTimeTableLogic.getThreadActionFetchTimetable(context, context.getString(R.string.timetable_url), true, false).start();
             try {
                 waitForTimeTable();
             } catch (InterruptedException e) {
