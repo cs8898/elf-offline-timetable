@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity
                 public void run() {
                     mWeekView.setMinDate(MarkedActsService.getMinDate());
                     mWeekView.setMaxDate(MarkedActsService.getMaxDate());
-                    //mWeekView.invalidate();
+                    mWeekView.invalidate();
                     mWeekView.notifyDatasetChanged();
                 }
             });
