@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 
 public class Common {
+    public static final int ONE_MIN = 60*1000;
     public static boolean isOnline(Context context) {
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

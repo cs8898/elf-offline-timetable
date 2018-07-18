@@ -1,4 +1,5 @@
 # elf-offline-timetable
+![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-1.png)
 
 We all know the ELF app isn't the best
 --------------------------------------
@@ -7,6 +8,7 @@ Here is an other approach...
 
 What you can do:
 - you can mark your favourite gigs
+- get notifications when an act starts
 - filter by stages
 - use it offline
 - can be migrated to other festivals
@@ -21,4 +23,19 @@ Screenshots:
 ![Full List](/screenshots/fulllist.png)
 ![Menu](/screenshots/menu.png)
 
+
+[![Get It On GooglePlay](https://cdn.rawgit.com/steverichey/google-play-badge-svg/master/img/en_get.svg)](https://play.google.com/store/apps/details?id=tk.cs8898.elfofflinett)
+
+Thanks:
+-------
+
 I'd like to thank Philipp for the JSON
+
+License:
+--------
+```
+Copyright © 2018 Christian Schmied <cs8898@gmx.de>
+This work is free. You can redistribute it and/or modify it under the
+terms of the Do What The Fuck You Want To Public License, Version 2,
+as published by Sam Hocevar. See the LICENSE file for more details.
+```
