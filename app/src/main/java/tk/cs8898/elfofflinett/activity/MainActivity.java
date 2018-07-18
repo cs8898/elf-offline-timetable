@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity
         filters = new HashSet<>();
         filterMenu = navigationView.getMenu().findItem(R.id.nav_filter_menu).getSubMenu();
         NotificationService.startActionInitNotification(this);
+        //fetch the timeTable from storage, if there is none its going to fetch it online anyways
+        FetchTimeTableService.startActionFetchTimetable(this,true,true);
     }
 
     @Override
@@ -281,7 +283,7 @@ public class MainActivity extends AppCompatActivity
                 public void run() {
                     mWeekView.setMinDate(MarkedActsService.getMinDate());
                     mWeekView.setMaxDate(MarkedActsService.getMaxDate());
-                    mWeekView.invalidate();
+                    //mWeekView.invalidate();
                     mWeekView.notifyDatasetChanged();
                 }
             });
