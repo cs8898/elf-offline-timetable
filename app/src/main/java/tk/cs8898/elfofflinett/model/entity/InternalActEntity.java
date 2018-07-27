@@ -1,16 +1,12 @@
 package tk.cs8898.elfofflinett.model.entity;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import tk.cs8898.elfofflinett.R;
 
 public class InternalActEntity {
     //July 5, 2018 15:45
@@ -91,38 +87,12 @@ public class InternalActEntity {
         return this.stage.getName();
     }
 
-    public int getColor(Context context) {
-        int color;
-        
-        switch (getLocation()) {
-            case "Mainstage":
-                if (isMarked())
-                    color = ContextCompat.getColor(context, R.color.mainstage);
-                else
-                    color = ContextCompat.getColor(context, R.color.mainstage_alt);
-                break;
-            case "Club Circus":
-                if (isMarked())
-                    color = ContextCompat.getColor(context, R.color.clubcircous);
-                else
-                    color = ContextCompat.getColor(context, R.color.clubcircous_alt);
-                break;
-            case "Heineken Starclub":
-                if (isMarked())
-                    color = ContextCompat.getColor(context, R.color.heineken);
-                else
-                    color = ContextCompat.getColor(context, R.color.heineken_alt);
-                break;
-            case "Q-Dance":
-                if (isMarked())
-                    color = ContextCompat.getColor(context, R.color.qdance);
-                else
-                    color = ContextCompat.getColor(context, R.color.qdance_alt);
-                break;
-            default:
-                color = Color.BLACK;
+    public int getColor() {
+        if(isMarked()){
+            return Color.parseColor(getStage().getColorA());
+        }else{
+            return Color.parseColor(getStage().getColorB());
         }
-        return color;
     }
 
     public void setId(long id){

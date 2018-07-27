@@ -4,21 +4,12 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>-->
 
-    <color name="colorPrimary">#4CAF50</color>
-    <color name="colorPrimaryDark">#388E3C</color>
-    <color name="colorPrimaryLight">#C8E6C9</color>
-    <color name="colorAccent">#8BC34A</color>
+    <color name="colorPrimary">#FFDB00</color>
+    <color name="colorPrimaryDark">#315FAA</color>
+    <color name="colorPrimaryLight">#FFFFFF</color>
+    <color name="colorAccent">#D130A7</color>
     <!--<color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>-->
-
-    <color name="clubcircous">#e05e76</color>
-    <color name="clubcircous_alt">#ea99a2</color>
-    <color name="mainstage">#5d569d</color>
-    <color name="mainstage_alt">#9189be</color>
-    <color name="heineken">#629a67</color>
-    <color name="heineken_alt">#9db996</color>
-    <color name="qdance">#f0814e</color>
-    <color name="qdance_alt">#f6ae87</color>
 </resources>

@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity
                         if (filters.contains(act.getLocation()))
                             continue;
                         WeekViewEvent event = new WeekViewEvent(act.toString(), act.getName(), act.getLocation(), actStart, actEnd);
-                        event.setColor(act.getColor(getApplicationContext()));
+                        event.setColor(act.getColor());
                         eventsList.add(event);
                     }
                 }
