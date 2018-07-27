@@ -2,6 +2,8 @@
   {
     "name": "Mainstage",
     "divname": "mainstage",
+    "colorA": "#5d569d",
+    "colorB": "#9189be",
     "acts": [
       {
         "time": "July 5, 2018 15:45",
@@ -213,6 +215,8 @@
   {
     "name": "Club Circus",
     "divname": "clubcircus",
+    "colorA": "#e05e76",
+    "colorB": "#ea99a2",
     "acts": [
       {
         "time": "July 4, 2018 18:00",
@@ -414,6 +418,8 @@
   {
     "name": "Q-Dance",
     "divname": "qdance",
+    "colorA": "#f0814e",
+    "colorB": "#f6ae87",
     "acts": [
       {
         "time": "July 6, 2018 14:45",
@@ -545,6 +551,8 @@
   {
     "name": "Heineken Starclub",
     "divname": "heinekenstarclub",
+    "colorA": "#629a67",
+    "colorB": "#9db996",
     "acts": [
       {
         "time": "July 5, 2018 16:00",
