@@ -1,180 +1,167 @@
 [
   {
-    "name": "DEV STAGE",
-    "divname": "devstage",
-    "colorA": "#ff0000",
-    "colorB": "#ffff00",
-    "acts": [
-	    {
-		    "time": "August 16, 2018 14:00",
-        "act": "DEV EVENT",
-        "end": "August 16, 2018 14:00"
-      }
-    ]
-  },
-  {
     "name": "SPACE STAGE",
     "divname": "spacestage",
     "colorA": "#227e82",
     "colorB": "#87d6c2",
     "acts": [
-	    {
-		    "time": "August 16, 2018 14:00",
+      {
+        "time": "August 16, 2018 14:00",
         "act": "DOORS",
         "end": "August 16, 2018 15:00"
       },
       {
-		    "time": "August 16, 2018 15:00",
+        "time": "August 16, 2018 15:00",
         "act": "Tom Walker",
         "end": "August 16, 2018 15:40"
       },
       {
-		    "time": "August 16, 2018 16:00",
+        "time": "August 16, 2018 16:00",
         "act": "Ofenbach",
         "end": "August 16, 2018 16:45"
       },
       {
-		    "time": "August 16, 2018 17:05",
+        "time": "August 16, 2018 17:05",
         "act": "Beartooth",
         "end": "August 16, 2018 17:55"
       },
       {
-		    "time": "August 16, 2018 18:20",
+        "time": "August 16, 2018 18:20",
         "act": "Käptn Peng",
         "end": "August 16, 2018 19:25"
       },
       {
-		    "time": "August 16, 2018 19:55",
+        "time": "August 16, 2018 19:55",
         "act": "Dropkick Murphys",
         "end": "August 16, 2018 21:05"
       },
       {
-		    "time": "August 16, 2018 21:35",
+        "time": "August 16, 2018 21:35",
         "act": "Die Antwoord",
         "end": "August 16, 2018 22:50"
       },
       {
-		    "time": "August 16, 2018 23:20",
+        "time": "August 16, 2018 23:20",
         "act": "Gorillaz",
         "end": "August 17, 2018 01:00"
       },
 	    {
-		    "time": "August 17, 2018 14:00",
+        "time": "August 17, 2018 14:00",
         "act": "DOORS",
         "end": "August 17, 2018 14:50"
       },
       {
-		    "time": "August 17, 2018 14:50",
+        "time": "August 17, 2018 14:50",
         "act": "Please Madame",
         "end": "August 17, 2018 15:30"
       },
       {
-		    "time": "August 17, 2018 16:00",
+        "time": "August 17, 2018 16:00",
         "act": "Faber",
         "end": "August 17, 2018 16:45"
       },
       {
-		    "time": "August 17, 2018 17:05",
+        "time": "August 17, 2018 17:05",
         "act": "RIN",
         "end": "August 17, 2018 17:55"
       },
       {
-		    "time": "August 17, 2018 18:25",
+        "time": "August 17, 2018 18:25",
         "act": "Afrojack",
         "end": "August 17, 2018 19:30"
       },
       {
-		    "time": "August 17, 2018 20:00",
+        "time": "August 17, 2018 20:00",
         "act": "RAF Camora & Bonez MC",
         "end": "August 17, 2018 21:10"
       },
       {
-		    "time": "August 17, 2018 21:40",
+        "time": "August 17, 2018 21:40",
         "act": "Macklemore",
         "end": "August 17, 2018 23:10"
       },
       {
-		    "time": "August 17, 2018 23:40",
+        "time": "August 17, 2018 23:40",
         "act": "Hardwell",
         "end": "August 18, 2018 01:00"
       },
       {
-		    "time": "August 18, 2018 14:00",
+        "time": "August 18, 2018 14:00",
         "act": "DOORS",
         "end": "August 18, 2018 15:00"
       },
       {
-		    "time": "August 18, 2018 15:00",
+        "time": "August 18, 2018 15:00",
         "act": "Luciano",
         "end": "August 18, 2018 15:40"
       },
       {
-		    "time": "August 18, 2018 16:00",
+        "time": "August 18, 2018 16:00",
         "act": "Eskimo Callboy",
         "end": "August 18, 2018 16:45"
       },
       {
-		    "time": "August 18, 2018 17:05",
+        "time": "August 18, 2018 17:05",
         "act": "The Used",
         "end": "August 18, 2018 17:55"
       },
       {
-		    "time": "August 18, 2018 18:25",
+        "time": "August 18, 2018 18:25",
         "act": "Death From Above",
         "end": "August 18, 2018 19:30"
       },
       {
-		    "time": "August 18, 2018 20:00",
+        "time": "August 18, 2018 20:00",
         "act": "Timmy Trumpet",
         "end": "August 18, 2018 21:10"
       },
       {
-		    "time": "August 18, 2018 21:40",
+        "time": "August 18, 2018 21:40",
         "act": "Casper",
         "end": "August 18, 2018 23:00"
       },
       {
-		    "time": "August 18, 2018 23:30",
+        "time": "August 18, 2018 23:30",
         "act": "KYGO",
         "end": "August 19, 2018 01:00"
       },
       {
-		    "time": "August 19, 2018 14:00",
+        "time": "August 19, 2018 14:00",
         "act": "DOORS",
         "end": "August 19, 2018 14:45"
       },
       {
-		    "time": "August 19, 2018 14:45",
+        "time": "August 19, 2018 14:45",
         "act": "Zugezogen Maskulin",
         "end": "August 19, 2018 15:25"
       },
       {
-		    "time": "August 19, 2018 15:45",
+        "time": "August 19, 2018 15:45",
         "act": "Papa Roach",
         "end": "August 19, 2018 16:25"
       },
       {
-		    "time": "August 19, 2018 16:45",
+        "time": "August 19, 2018 16:45",
         "act": "Lost Frequencies",
         "end": "August 19, 2018 17:45"
       },
       {
-		    "time": "August 19, 2018 18:00",
+        "time": "August 19, 2018 18:00",
         "act": "SUM 41",
         "end": "August 19, 2018 19:05"
       },
       {
-		    "time": "August 19, 2018 19:40",
+        "time": "August 19, 2018 19:40",
         "act": "Kaleo",
         "end": "August 19, 2018 20:40"
       },
       {
-		    "time": "August 19, 2018 21:15",
+        "time": "August 19, 2018 21:15",
         "act": "Imagine Dragons",
         "end": "August 19, 2018 22:55"
       },
       {
-		    "time": "August 19, 2018 22:55",
+        "time": "August 19, 2018 22:55",
         "act": "Final Closing Show",
         "end": "August 19, 2018 23:59"
       }
@@ -187,122 +174,122 @@
     "colorB": "#c7e787",
     "acts": [
 	    {
-		    "time": "August 16, 2018 14:00",
+        "time": "August 16, 2018 14:00",
         "act": "DOORS",
         "end": "August 16, 2018 15:20"
       },
       {
-		    "time": "August 16, 2018 15:20",
+        "time": "August 16, 2018 15:20",
         "act": "NONAME",
         "end": "August 16, 2018 16:00"
       },
       {
-		    "time": "August 16, 2018 16:20",
+        "time": "August 16, 2018 16:20",
         "act": "Little Simz",
         "end": "August 16, 2018 17:10"
       },
       {
-		    "time": "August 16, 2018 17:30",
+        "time": "August 16, 2018 17:30",
         "act": "Trettmann",
         "end": "August 16, 2018 18:30"
       },
       {
-		    "time": "August 16, 2018 18:50",
+        "time": "August 16, 2018 18:50",
         "act": "UFO361",
         "end": "August 16, 2018 19:45"
       },
       {
-		    "time": "August 16, 2018 20:05",
+        "time": "August 16, 2018 20:05",
         "act": "Yung Hurn",
         "end": "August 16, 2018 21:15"
       },
       {
-		    "time": "August 16, 2018 21:45",
+        "time": "August 16, 2018 21:45",
         "act": "Trailerpark",
         "end": "August 16, 2018 23:00"
       },
       {
-		    "time": "August 16, 2018 23:30",
+        "time": "August 16, 2018 23:30",
         "act": "Bastille",
         "end": "August 17, 2018 00:40"
       },
 	    {
-		    "time": "August 17, 2018 14:00",
+        "time": "August 17, 2018 14:00",
         "act": "DOORS",
         "end": "August 17, 2018 15:10"
       },
       {
-		    "time": "August 17, 2018 15:10",
+        "time": "August 17, 2018 15:10",
         "act": "TBC",
         "end": "August 17, 2018 15:50"
       },
       {
-		    "time": "August 17, 2018 16:10",
+        "time": "August 17, 2018 16:10",
         "act": "The Crispies",
         "end": "August 17, 2018 17:00"
       },
       {
-		    "time": "August 17, 2018 17:20",
+        "time": "August 17, 2018 17:20",
         "act": "Felix Jaehn",
         "end": "August 17, 2018 18:20"
       },
       {
-		    "time": "August 17, 2018 18:50",
+        "time": "August 17, 2018 18:50",
         "act": "Jamie Lawson",
         "end": "August 17, 2018 19:50"
       },
       {
-		    "time": "August 17, 2018 20:20",
+        "time": "August 17, 2018 20:20",
         "act": "Mando Diao",
         "end": "August 17, 2018 21:20"
       },
       {
-		    "time": "August 17, 2018 21:50",
+        "time": "August 17, 2018 21:50",
         "act": "Broilers",
         "end": "August 17, 2018 22:50"
       },
       {
-		    "time": "August 17, 2018 23:20",
+        "time": "August 17, 2018 23:20",
         "act": "Flogging Molly",
         "end": "August 18, 2018 00:40"
       },
       {
-		    "time": "August 18, 2018 14:00",
+        "time": "August 18, 2018 14:00",
         "act": "DOORS",
         "end": "August 18, 2018 15:20"
       },
       {
-		    "time": "August 18, 2018 15:20",
+        "time": "August 18, 2018 15:20",
         "act": "Off Bloom",
         "end": "August 18, 2018 16:00"
       },
       {
-		    "time": "August 18, 2018 16:20",
+        "time": "August 18, 2018 16:20",
         "act": "Feine Sahne Fischfilet",
         "end": "August 18, 2018 17:10"
       },
       {
-		    "time": "August 18, 2018 17:40",
+        "time": "August 18, 2018 17:40",
         "act": "Walk Off The Earth",
         "end": "August 18, 2018 18:30"
       },
       {
-		    "time": "August 18, 2018 18:50",
+        "time": "August 18, 2018 18:50",
         "act": "The Vaccines",
         "end": "August 18, 2018 19:40"
       },
       {
-		    "time": "August 18, 2018 20:10",
+        "time": "August 18, 2018 20:10",
         "act": "Left Boy",
         "end": "August 18, 2018 21:10"
       },
       {
-		    "time": "August 18, 2018 21:40",
+        "time": "August 18, 2018 21:40",
         "act": "The Kooks",
         "end": "August 18, 2018 22:40"
       },
       {
-		    "time": "August 18, 2018 23:00",
+        "time": "August 18, 2018 23:00",
         "act": "VINI VICI",
         "end": "August 18, 2018 23:59"
       }
@@ -315,62 +302,62 @@
     "colorB": "#fcd89f",
     "acts": [
 	    {
-		    "time": "August 17, 2018 15:30",
+        "time": "August 17, 2018 15:30",
         "act": "DOORS",
         "end": "August 17, 2018 16:00"
       },
       {
-		    "time": "August 17, 2018 16:00",
+        "time": "August 17, 2018 16:00",
         "act": "At Pavillon",
         "end": "August 17, 2018 16:40"
       },
       {
-		    "time": "August 17, 2018 16:55",
+        "time": "August 17, 2018 16:55",
         "act": "Findlay",
         "end": "August 17, 2018 17:40"
       },
       {
-		    "time": "August 17, 2018 18:00",
+        "time": "August 17, 2018 18:00",
         "act": "The Wanton Bishops",
         "end": "August 17, 2018 19:00"
       },
       {
-		    "time": "August 17, 2018 19:20",
+        "time": "August 17, 2018 19:20",
         "act": "Francobollo",
         "end": "August 17, 2018 20:20"
       },
       {
-		    "time": "August 17, 2018 20:45",
+        "time": "August 17, 2018 20:45",
         "act": "Thunder Pussy",
         "end": "August 17, 2018 22:00"
       },
       {
-		    "time": "August 18, 2018 15:30",
+        "time": "August 18, 2018 15:30",
         "act": "DOORS",
         "end": "August 18, 2018 16:00"
       },
       {
-		    "time": "August 18, 2018 16:00",
+        "time": "August 18, 2018 16:00",
         "act": "SWMRS",
         "end": "August 18, 2018 16:40"
       },
       {
-		    "time": "August 18, 2018 16:55",
+        "time": "August 18, 2018 16:55",
         "act": "Fufanu",
         "end": "August 18, 2018 17:40"
       },
       {
-		    "time": "August 18, 2018 18:00",
+        "time": "August 18, 2018 18:00",
         "act": "Cabbage",
         "end": "August 18, 2018 19:00"
       },
       {
-		    "time": "August 18, 2018 19:20",
+        "time": "August 18, 2018 19:20",
         "act": "Seafret",
         "end": "August 17, 2018 20:20"
       },
       {
-		    "time": "August 18, 2018 20:45",
+        "time": "August 18, 2018 20:45",
         "act": "Yonaka",
         "end": "August 18, 2018 22:00"
       }
@@ -383,87 +370,87 @@
     "colorB": "#8384ca",
     "acts": [
       {
-		    "time": "August 16, 2018 23:00",
+        "time": "August 16, 2018 23:00",
         "act": "DOORS",
         "end": "August 16, 2018 23:15"
       },
 	    {
-		    "time": "August 16, 2018 23:15",
+        "time": "August 16, 2018 23:15",
         "act": "Dimension",
         "end": "August 17, 2018 00:15"
       },
       {
-		    "time": "August 17, 2018 00:15",
+        "time": "August 17, 2018 00:15",
         "act": "Wilkinson",
         "end": "August 17, 2018 01:15"
       },
       {
-		    "time": "August 17, 2018 01:15",
+        "time": "August 17, 2018 01:15",
         "act": "Chase & Status",
         "end": "August 17, 2018 02:30"
       },
       {
-		    "time": "August 17, 2018 02:30",
+        "time": "August 17, 2018 02:30",
         "act": "Netsky",
         "end": "August 17, 2018 03:30"
       },
       {
-		    "time": "August 17, 2018 03:30",
+        "time": "August 17, 2018 03:30",
         "act": "Drunken Masters",
         "end": "August 17, 2018 04:30"
       },
       {
-		    "time": "August 17, 2018 23:00",
+        "time": "August 17, 2018 23:00",
         "act": "DOORS",
         "end": "August 17, 2018 23:15"
       },
 	    {
-		    "time": "August 17, 2018 23:15",
+        "time": "August 17, 2018 23:15",
         "act": "Perturbator",
         "end": "August 17, 2018 23:59"
       },
       {
-		    "time": "August 18, 2018 00:00",
+        "time": "August 18, 2018 00:00",
         "act": "Modestep",
         "end": "August 18, 2018 01:15"
       },
       {
-		    "time": "August 18, 2018 01:15",
+        "time": "August 18, 2018 01:15",
         "act": "Krewella",
         "end": "August 18, 2018 02:30"
       },
       {
-		    "time": "August 18, 2018 02:30",
+        "time": "August 18, 2018 02:30",
         "act": "Seven Lions",
         "end": "August 18, 2018 03:30"
       },
       {
-		    "time": "August 18, 2018 03:30",
+        "time": "August 18, 2018 03:30",
         "act": "Louis The Child",
         "end": "August 18, 2018 04:30"
       },
 	    {
-		    "time": "August 18, 2018 23:00",
+        "time": "August 18, 2018 23:00",
         "act": "AV AV AV",
         "end": "August 18, 2018 23:45"
       },
       {
-		    "time": "August 18, 2018 23:45",
+        "time": "August 18, 2018 23:45",
         "act": "SALUTE",
         "end": "August 19, 2018 00:45"
       },
       {
-		    "time": "August 19, 2018 00:45",
+        "time": "August 19, 2018 00:45",
         "act": "Jauz",
         "end": "August 19, 2018 02:00"
       },
       {
-		    "time": "August 19, 2018 02:00",
+        "time": "August 19, 2018 02:00",
         "act": "DVBBS",
         "end": "August 19, 2018 03:15"
       },
       {
-		    "time": "August 19, 2018 03:15",
+        "time": "August 19, 2018 03:15",
         "act": "Wildstylez",
         "end": "August 19, 2018 04:15"
       }
@@ -481,97 +468,97 @@
         "end": "August 16, 2018 23:59"
       },
 	    {
-		    "time": "August 17, 2018 00:00",
+        "time": "August 17, 2018 00:00",
         "act": "Mount",
         "end": "August 17, 2018 00:45"
       },
       {
-		    "time": "August 17, 2018 00:45",
+        "time": "August 17, 2018 00:45",
         "act": "Filous",
         "end": "August 17, 2018 01:45"
       },
       {
-		    "time": "August 17, 2018 01:45",
+        "time": "August 17, 2018 01:45",
         "act": "Kungs",
         "end": "August 17, 2018 03:00"
       },
       {
-		    "time": "August 17, 2018 03:00",
+        "time": "August 17, 2018 03:00",
         "act": "Sigala",
         "end": "August 17, 2018 04:15"
       },
       {
-		    "time": "August 17, 2018 04:15",
+        "time": "August 17, 2018 04:15",
         "act": "James Hype",
         "end": "August 17, 2018 05:15"
       },
       {
-		    "time": "August 17, 2018 23:00",
+        "time": "August 17, 2018 23:00",
         "act": "DOORS",
         "end": "August 17, 2018 23:59"
       },
 	    {
-		    "time": "August 18, 2018 00:00",
+        "time": "August 18, 2018 00:00",
         "act": "Parasite",
         "end": "August 18, 2018 00:45"
       },
       {
-		    "time": "August 18, 2018 00:40",
+        "time": "August 18, 2018 00:40",
         "act": "Mefjus FT. Maksim MC",
         "end": "August 18, 2018 02:00"
       },
       {
-		    "time": "August 18, 2018 02:00",
+        "time": "August 18, 2018 02:00",
         "act": "Andy C",
         "end": "August 18, 2018 03:30"
       },
       {
-		    "time": "August 18, 2018 03:30",
+        "time": "August 18, 2018 03:30",
         "act": "Calyx & Teebee",
         "end": "August 18, 2018 05:00"
       },
       {
-		    "time": "August 18, 2018 05:00",
+        "time": "August 18, 2018 05:00",
         "act": "SUKI",
         "end": "August 18, 2018 06:00"
       },
       {
-		    "time": "August 18, 2018 23:00",
+        "time": "August 18, 2018 23:00",
         "act": "DOORS",
         "end": "August 18, 2018 23:59"
       },
 	    {
-		    "time": "August 19, 2018 00:00",
+        "time": "August 19, 2018 00:00",
         "act": "Splinta B2B Doree",
         "end": "August 19, 2018 00:30"
       },
       {
-		    "time": "August 19, 2018 00:30",
+        "time": "August 19, 2018 00:30",
         "act": "Pandora & Coda",
         "end": "August 19, 2018 01:00"
       },
       {
-		    "time": "August 19, 2018 01:00",
+        "time": "August 19, 2018 01:00",
         "act": "A.M.C & Turno",
         "end": "August 19, 2018 02:00"
       },
       {
-		    "time": "August 19, 2018 02:00",
+        "time": "August 19, 2018 02:00",
         "act": "Macky Gee",
         "end": "August 19, 2018 03:15"
       },
       {
-		    "time": "August 19, 2018 03:15",
+        "time": "August 19, 2018 03:15",
         "act": "DJ Hype B2B Hazard",
         "end": "August 19, 2018 04:30"
       },
       {
-		    "time": "August 19, 2018 04:30",
+        "time": "August 19, 2018 04:30",
         "act": "Skore",
         "end": "August 19, 2018 05:00"
       },
       {
-		    "time": "August 19, 2018 05:00",
+        "time": "August 19, 2018 05:00",
         "act": "Shifty",
         "end": "August 19, 2018 06:00"
       }
@@ -584,52 +571,52 @@
     "colorB": "#ad5c4c",
     "acts": [
 	    {
-		    "time": "August 16, 2018 19:30",
+        "time": "August 16, 2018 19:30",
         "act": "Serex",
         "end": "August 16, 2018 20:45"
       },
       {
-		    "time": "August 16, 2018 20:45",
+        "time": "August 16, 2018 20:45",
         "act": "Mahodin",
         "end": "August 16, 2018 22:00"
       },
       {
-		    "time": "August 16, 2018 22:00",
+        "time": "August 16, 2018 22:00",
         "act": "Phandelic",
         "end": "August 16, 2018 23:00"
       },
       {
-		    "time": "August 17, 2018 19:30",
+        "time": "August 17, 2018 19:30",
         "act": "ANZN",
         "end": "August 17, 2018 20:45"
       },
       {
-		    "time": "August 17, 2018 20:45",
+        "time": "August 17, 2018 20:45",
         "act": "John TPS",
         "end": "August 17, 2018 22:00"
       },
       {
-		    "time": "August 17, 2018 22:00",
+        "time": "August 17, 2018 22:00",
         "act": "Tristate",
         "end": "August 17, 2018 23:15"
       },
       {
-		    "time": "August 17, 2018 23:15",
+        "time": "August 17, 2018 23:15",
         "act": "Chemical Love",
         "end": "August 18, 2018 00:15"
       },
       {
-		    "time": "August 18, 2018 19:30",
+        "time": "August 18, 2018 19:30",
         "act": "LUMEX",
         "end": "August 16, 2018 21:30"
       },
       {
-		    "time": "August 18, 2018 21:30",
+        "time": "August 18, 2018 21:30",
         "act": "Hernandez",
         "end": "August 18, 2018 23:00"
       },
       {
-		    "time": "August 18, 2018 23:00",
+        "time": "August 18, 2018 23:00",
         "act": "Concept Art",
         "end": "August 18, 2018 23:59"
       }
