@@ -304,7 +304,7 @@
       {
 		    "time": "August 18, 2018 23:00",
         "act": "VINI VICI",
-        "end": "August 19, 2018 00:00"
+        "end": "August 18, 2018 23:59"
       }
     ]
   },
@@ -419,8 +419,8 @@
       },
 	    {
 		    "time": "August 17, 2018 23:15",
-        "act": "Pertutbator",
-        "end": "August 18, 2018 00:00"
+        "act": "Perturbator",
+        "end": "August 17, 2018 23:59"
       },
       {
 		    "time": "August 18, 2018 00:00",
@@ -476,9 +476,9 @@
     "colorB": "#9d83ca",
     "acts": [
       {
-		    "time": "August 16, 2018 23:00",
+        "time": "August 16, 2018 23:00",
         "act": "DOORS",
-        "end": "August 17, 2018 00:00"
+        "end": "August 16, 2018 23:59"
       },
 	    {
 		    "time": "August 17, 2018 00:00",
@@ -508,7 +508,7 @@
       {
 		    "time": "August 17, 2018 23:00",
         "act": "DOORS",
-        "end": "August 18, 2018 00:00"
+        "end": "August 17, 2018 23:59"
       },
 	    {
 		    "time": "August 18, 2018 00:00",
@@ -538,7 +538,7 @@
       {
 		    "time": "August 18, 2018 23:00",
         "act": "DOORS",
-        "end": "August 19, 2018 00:00"
+        "end": "August 18, 2018 23:59"
       },
 	    {
 		    "time": "August 19, 2018 00:00",
@@ -631,7 +631,7 @@
       {
 		    "time": "August 18, 2018 23:00",
         "act": "Concept Art",
-        "end": "August 19, 2018 00:00"
+        "end": "August 18, 2018 23:59"
       }
     ]
   }
