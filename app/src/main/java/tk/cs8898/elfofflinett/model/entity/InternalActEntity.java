@@ -93,6 +93,7 @@ public class InternalActEntity {
 
     public int getColor(Context context) {
         int color;
+        
         switch (getLocation()) {
             case "Mainstage":
                 if (isMarked())

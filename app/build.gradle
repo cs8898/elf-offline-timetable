@@ -25,11 +25,20 @@ android {
         applicationId "tk.cs8898.elfofflinett"
         minSdkVersion 16
         targetSdkVersion 27
-	versionCode appVersionCode as Integer
-	versionName "1.2.0"
+        versionCode appVersionCode as Integer
+        versionName "1.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         signingConfig signingConfigs.production
+    }
+    flavorDimensions 'default'
+    productFlavors {
+        elf{
+
+        }
+        fm4frequency{
+            applicationId "tk.cs8898.fm4frequency"
+        }
     }
     buildTypes {
         release {
