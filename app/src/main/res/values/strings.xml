@@ -2,7 +2,7 @@
     <!--<string name="app_name">ELF 18 OfflineTimetable</string>-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Electric Love Festival 2018</string>
+    <!--<string name="nav_header_title">Electric Love Festival 2018</string>-->
     <string name="nav_header_subtitle">Another Timetable App</string>
     <!--<string name="nav_header_desc">Navigation header</string>-->
     <string name="action_refresh">Refresh</string>
