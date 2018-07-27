@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -84,9 +85,13 @@ public class FetchTimeTableLogic {
 
             String jsonBody = new String(data, "UTF-8");
 
-            Gson gson = new Gson();
-
-            StageEntity[] stages = gson.fromJson(jsonBody, StageEntity[].class);
+            StageEntity[] stages;
+            try{
+                Gson gson = new Gson();
+                stages = gson.fromJson(jsonBody, StageEntity[].class);
+            }catch (JsonSyntaxException e){
+                return false;
+            }
             /*for(int d = 10; d <= 30; d++) {
                 for (int h = 0; h <= 23; h++) {
                     stages[0].getActs().add(new ActEntity("July " + d + ", 2018 " + String.format(Locale.GERMAN, "%02d", h) + ":00", "0-" + d + "-" + h, "July " + d + ", 2018 " + String.format(Locale.GERMAN, "%02d", h) + ":45"));

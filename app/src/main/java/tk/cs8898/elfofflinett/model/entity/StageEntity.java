@@ -24,7 +24,7 @@ public class StageEntity {
     }
 
     public String getColorA() {
-        return colorA;
+        return colorA!=null?colorA:"red";
     }
 
     public void setColorA(String colorA) {
@@ -32,7 +32,7 @@ public class StageEntity {
     }
 
     public String getColorB() {
-        return colorB;
+        return colorB!=null?colorB:"green";
     }
 
     public void setColorB(String colorB) {
