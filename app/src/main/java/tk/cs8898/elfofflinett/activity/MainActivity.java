@@ -1,7 +1,11 @@
 package tk.cs8898.elfofflinett.activity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SeekBar;
 
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
@@ -44,6 +49,9 @@ public class MainActivity extends AppCompatActivity
 
     private static final String MARKED_VIEW = "tk.cs8898.elfofflinett.view.marked";
     private static final String ALL_VIEW = "tk.cs8898.elfofflinett.view.all";
+
+    private static final String PREF_NOTIFICATIONEARLY_TIME = "notificationearlytime";
+    private static final String PREFERENCES_NAME = "tk.cs8898.elfofflinett.preferences";
 
     private WeekView mWeekView;
 
@@ -91,18 +99,18 @@ public class MainActivity extends AppCompatActivity
         filterMenu = navigationView.getMenu().findItem(R.id.nav_filter_menu).getSubMenu();
         NotificationService.startActionInitNotification(this);
         //fetch the timeTable from storage, if there is none its going to fetch it online anyways
-        FetchTimeTableService.startActionFetchTimetable(this,true,true);
+        FetchTimeTableService.startActionFetchTimetable(this, true, true);
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         //NotificationService.startActionTriggerNotification(this,Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"),Locale.GERMANY).getTimeInMillis());
         goToToday();
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         BusProvider.getInstance().register(this);
     }
@@ -144,8 +152,43 @@ public class MainActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.action_change_daycount) {
             mWeekView.setNumberOfVisibleDays(mWeekView.getNumberOfVisibleDays() % 3 + 1);
-        }
+        } else if (id == R.id.action_set_notificationearliertime) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final SeekBar bar = new SeekBar(this);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                bar.setMin(0);
+            }
+            bar.setMax(30);
+            bar.setProgress(getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).getInt(PREF_NOTIFICATIONEARLY_TIME,0));
 
+            builder.setView(bar);
+            builder.setCancelable(true);
+            builder.setTitle(String.format(Locale.GERMAN,"Notification %d minutes before start.",getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).getInt(PREF_NOTIFICATIONEARLY_TIME,0)));
+            builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit().putInt(PREF_NOTIFICATIONEARLY_TIME,
+                            bar.getProgress()).apply();
+                }
+            });
+            final AlertDialog dialog = builder.show();
+            bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    dialog.setTitle(String.format(Locale.GERMAN,"Notification %d minutes before start.",progress));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -173,7 +216,7 @@ public class MainActivity extends AppCompatActivity
                     filters.remove(filterStageTitle);
                     item.setIcon(R.drawable.ic_check_box);
                 } else {
-                    filters.add((String) item.getTitle());
+                    filters.add(filterStageTitle);
                     item.setIcon(R.drawable.ic_check_box_outline);
                 }
                 mWeekView.notifyDatasetChanged();
@@ -263,21 +306,21 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void goToToday(){
+    private void goToToday() {
         Calendar now = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"), Locale.GERMANY);
-        if(mWeekView.getMinDate()!=null && now.before(mWeekView.getMinDate())){
+        if (mWeekView.getMinDate() != null && now.before(mWeekView.getMinDate())) {
             mWeekView.goToDate(mWeekView.getMinDate());
-        }else if(mWeekView.getMaxDate()!=null && now.after(mWeekView.getMaxDate())){
+        } else if (mWeekView.getMaxDate() != null && now.after(mWeekView.getMaxDate())) {
             mWeekView.goToDate(mWeekView.getMaxDate());
-        }else{
+        } else {
             mWeekView.goToDate(now);
             mWeekView.goToHour(now.get(Calendar.HOUR_OF_DAY));
         }
     }
 
     @Subscribe
-    public void onDatasetChanged(MessageDatasetChanged message){
-        if(!message.getOrigin().equals(MainActivity.class)){
+    public void onDatasetChanged(MessageDatasetChanged message) {
+        if (!message.getOrigin().equals(MainActivity.class)) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

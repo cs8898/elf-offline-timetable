@@ -92,14 +92,14 @@ public class FetchTimeTableLogic {
             }catch (JsonSyntaxException e){
                 return false;
             }
-            /*for(int d = 10; d <= 30; d++) {
+            for(int d = 28; d <= 30; d++) {
                 for (int h = 0; h <= 23; h++) {
                     stages[0].getActs().add(new ActEntity("July " + d + ", 2018 " + String.format(Locale.GERMAN, "%02d", h) + ":00", "0-" + d + "-" + h, "July " + d + ", 2018 " + String.format(Locale.GERMAN, "%02d", h) + ":45"));
                     stages[1].getActs().add(new ActEntity("July " + d + ", 2018 " + String.format(Locale.GERMAN, "%02d", h) + ":15", "1-" + d + "-" + h, "July " + d + ", 2018 " + String.format(Locale.GERMAN, "%02d", h) + ":45"));
                     stages[2].getActs().add(new ActEntity("July " + d + ", 2018 " + String.format(Locale.GERMAN, "%02d", h) + ":30", "2-" + d + "-" + h, "July " + d + ", 2018 " + String.format(Locale.GERMAN, "%02d", (h+1)%24) + ":00"));
                     stages[3].getActs().add(new ActEntity("July " + d + ", 2018 " + String.format(Locale.GERMAN, "%02d", h) + ":45", "3-" + d + "-" + h, "July " + d + ", 2018 " + String.format(Locale.GERMAN, "%02d", (h+1)%24) + ":15"));
                 }
-            }*/
+            }
             MarkedActsService.setAllActs(context.getApplicationContext(), stages, update);
             Log.d("FetchTimeTableService", "fetched " + stages.length + " stages");
             return true;
