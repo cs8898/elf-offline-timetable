@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.SubMenu;
 import android.view.View;
@@ -259,7 +260,7 @@ public class MainActivity extends AppCompatActivity
         for (StageEntity stage : MarkedActsService.getStages()) {
             //filters.add(location);
             SpannableString location = new SpannableString(stage.getName());
-            location.setSpan(Color.parseColor(stage.getColorA()),0,location.length(),0);
+            location.setSpan(new ForegroundColorSpan(Color.parseColor(stage.getColorA())),0,location.length(),0);
             MenuItem item = filterMenu.add(R.id.nav_filter_group, Menu.NONE, i++, location);
             //item.setCheckable(false);
             if (filters.contains(location.toString()))
