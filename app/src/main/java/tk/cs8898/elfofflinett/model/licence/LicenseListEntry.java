@@ -26,7 +26,7 @@ public class LicenseListEntry {
         licenses.add(new Apache2("2008 Google Inc.","google-gson", "https://github.com/google/gson"));
         licenses.add(new Apache2("2016 Square, Inc.","OkHttp", "https://github.com/square/okhttp"));
         licenses.add(new Apache2("2013 Square, Inc.","Otto", "https://github.com/square/otto"));
-        licenses.add(new Apache2("2014 Raquib-ul-Alam","Android Week View","https://github.com/Quivr/Android-Week-View"));
+        licenses.add(new Apache2("2014 Raquib-ul-Alam","Android Week View","https://github.com/cs8898/Android-Week-View"));
         return getLicenseListEntries(licenses);
     }
 

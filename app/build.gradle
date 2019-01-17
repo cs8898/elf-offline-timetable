@@ -20,11 +20,11 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "tk.cs8898.elfofflinett"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode appVersionCode as Integer
         versionName "1.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -50,12 +50,13 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.github.quivr:android-week-view:2.3.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    // implementation 'com.github.quivr:android-week-view:2.3.0'
+    implementation 'com.github.cs8898:Android-Week-View:feature~priority-ordering-SNAPSHOT'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     implementation 'com.squareup:otto:1.3.8'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

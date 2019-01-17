@@ -1,10 +1,12 @@
 package tk.cs8898.elfofflinett.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.SubMenu;
 import android.view.View;
@@ -36,6 +38,7 @@ import tk.cs8898.elfofflinett.model.bus.BusProvider;
 import tk.cs8898.elfofflinett.model.bus.messages.MessageDatasetChanged;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
 import tk.cs8898.elfofflinett.model.entity.InternalActEntity;
+import tk.cs8898.elfofflinett.model.entity.StageEntity;
 import tk.cs8898.elfofflinett.services.FetchTimeTableService;
 import tk.cs8898.elfofflinett.services.NotificationService;
 
@@ -173,7 +176,7 @@ public class MainActivity extends AppCompatActivity
                     filters.remove(filterStageTitle);
                     item.setIcon(R.drawable.ic_check_box);
                 } else {
-                    filters.add((String) item.getTitle());
+                    filters.add(filterStageTitle);
                     item.setIcon(R.drawable.ic_check_box_outline);
                 }
                 mWeekView.notifyDatasetChanged();
@@ -240,6 +243,7 @@ public class MainActivity extends AppCompatActivity
                             continue;
                         WeekViewEvent event = new WeekViewEvent(act.toString(), act.getName(), act.getLocation(), actStart, actEnd);
                         event.setColor(act.getColor());
+                        event.setPriority(act.getLocation().hashCode());
                         eventsList.add(event);
                     }
                 }
@@ -252,11 +256,13 @@ public class MainActivity extends AppCompatActivity
         filterMenu.clear();
         //filters.clear();
         int i = 0;
-        for (String location : MarkedActsService.getLocations()) {
+        for (StageEntity stage : MarkedActsService.getStages()) {
             //filters.add(location);
+            SpannableString location = new SpannableString(stage.getName());
+            location.setSpan(Color.parseColor(stage.getColorA()),0,location.length(),0);
             MenuItem item = filterMenu.add(R.id.nav_filter_group, Menu.NONE, i++, location);
             //item.setCheckable(false);
-            if (filters.contains(location))
+            if (filters.contains(location.toString()))
                 item.setIcon(R.drawable.ic_check_box_outline);
             else
                 item.setIcon(R.drawable.ic_check_box);
