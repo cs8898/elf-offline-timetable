@@ -12,6 +12,6 @@
     <string name="filters">Filters</string>
     <string name="other">Other</string>
     <string name="switch_display_days">Switch Display Days</string>
-    <string name="notificationearliertime">Notification Settings</string>
+    <string name="notification_earlier_time">Notification Settings</string>
     <!--<string name="timetable_url">https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/elf18tt_min.json</string>-->
 </resources>

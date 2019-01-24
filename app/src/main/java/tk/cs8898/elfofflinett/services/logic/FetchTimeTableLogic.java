@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
+import java.util.concurrent.locks.ReentrantLock;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -27,6 +28,7 @@ import tk.cs8898.elfofflinett.services.FetchTimeTableService;
 public class FetchTimeTableLogic {
 
     private static final String LOCAL_FILE = "elfofflinett.json";
+    private static final ReentrantLock LOAD_LOCK = new ReentrantLock();
 
     public static Thread getThreadActionFetchTimetable(final Context context, final String url, final boolean offline, final boolean update){
         return new Thread(){
@@ -38,6 +40,10 @@ public class FetchTimeTableLogic {
     }
 
     public static void handleActionFetchTimetable(Context context, String url, boolean offline, boolean update) {
+        if(!LOAD_LOCK.tryLock()) {
+            Log.d(FetchTimeTableLogic.class.getSimpleName(),"There is already some Fetch running");
+            return;
+        }
         if(!loadOffline(context, update)){
             offline=false;//Force Loading Online when there was no offline file
         }
@@ -46,6 +52,7 @@ public class FetchTimeTableLogic {
                 loadOffline(context, update);
         }
         BusProvider.getInstance().post(new MessageDatasetReady(FetchTimeTableService.class));
+        LOAD_LOCK.unlock();
     }
 
     private static boolean fetchOnline(Context context, String url) {

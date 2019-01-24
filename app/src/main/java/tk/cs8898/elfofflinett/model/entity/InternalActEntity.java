@@ -1,6 +1,7 @@
 package tk.cs8898.elfofflinett.model.entity;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +17,8 @@ public class InternalActEntity {
     private StageEntity stage;
     private boolean marked;
     private long id;
+    private Calendar time;
+    private Calendar end;
 
     public InternalActEntity(StageEntity stage, ActEntity act, long id) {
         this(stage, act, id, false);
@@ -26,6 +29,8 @@ public class InternalActEntity {
         this.act = act;
         this.id = id;
         this.marked = marked;
+        this.time = getCalendarTime();
+        this.end = getCalendarEnd();
     }
 
     public ActEntity getAct() {
@@ -52,26 +57,35 @@ public class InternalActEntity {
         return marked;
     }
 
-    public Calendar getTime() {
+    private Calendar getCalendarTime() {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"),Locale.GERMANY);
         try {
+            //Log.d("InternalActEntry", "Time is" + this.act.getTime());
             cal.setTime(dateFormat.parse(this.act.getTime()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
+        } catch (Exception e) {
+            //e.printStackTrace();
+            Log.d("InternalActEntry", this.act.getAct()+" Time is "+this.act.getTime());
+            cal.setTimeInMillis(0);
+            //return null;
         }
         return cal;
     }
-
-    public Calendar getEnd() {
+    public Calendar getTime(){
+        return time;
+    }
+    private Calendar getCalendarEnd() {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"),Locale.GERMANY);
         try {
             cal.setTime(dateFormat.parse(this.act.getEnd()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            cal.setTimeInMillis(0);
+            //return null;
         }
         return cal;
+    }
+    public Calendar getEnd(){
+        return end;
     }
 
     @Override

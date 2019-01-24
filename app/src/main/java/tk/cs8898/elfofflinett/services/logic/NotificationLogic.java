@@ -34,37 +34,34 @@ import tk.cs8898.elfofflinett.receiver.AlarmReceiver;
 import tk.cs8898.elfofflinett.services.FetchTimeTableService;
 import tk.cs8898.elfofflinett.services.NotificationService;
 
+import static tk.cs8898.elfofflinett.model.Common.PREFERENCES_NAME;
+import static tk.cs8898.elfofflinett.model.Common.PREF_NOTIFICATIONTRIGGER_TIME_NAME;
+import static tk.cs8898.elfofflinett.model.Common.PREF_NOTIFICATION_EARLIER_TIME_NAME;
+
 public class NotificationLogic {
-    private static final String PREFERENCES_NAME = "tk.cs8898.elfofflinett.preferences";
-    private static final String PREF_NOTIFICATIONTRIGGER_TIME = "notificationtime";
-    private static final String PREF_NOTIFICATIONEARLY_TIME = "notificationearlytime";
     private static final String NOTIFICATION_CHAN_ID = "tk.cs8898.elfofflinett.notification.current";
     private static final String NOTIFICATION_CHAN_NAME = "Current Event";
     private static final int REQUEST_CODE = 889801;
     private static final int NOTIFICATION_ID = 889810;
 
-    public static final String EXTRA_TIME = "tk.cs8898.elfofflinett.extra.time";
-
-    private final Object waitTimeTableLock = new Object();
+    private final Object waitForTimeTableLock = new Object();
 
     /**
      * Removes an old timer and adds a new one
      */
     public void handleActionInitNotification(Context context) {
         if (MarkedActsService.getActs().size() == 0) {
-            BusProvider.getInstance().register(this);
-            FetchTimeTableService.startActionFetchTimetable(context, true, false);
             try {
-                waitForTimeTable();
+                //waitForTimeTable(context,false);
+                waitForTimeTable(context,true);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            BusProvider.getInstance().unregister(this);
         }
 
         //FETCH LAST NOTIFICATION FOR DELETE
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
-        long lastTriggerTime = preferences.getLong(PREF_NOTIFICATIONTRIGGER_TIME, -1);
+        long lastTriggerTime = preferences.getLong(PREF_NOTIFICATIONTRIGGER_TIME_NAME, -1);
 
         //DELETE LAST TRIGGER
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -89,30 +86,32 @@ public class NotificationLogic {
 
         //FIND MINIMUM CHANGE TIME
         boolean endTime = false;
-        for (InternalActEntity act : MarkedActsService.getMarked()) {
+        synchronized (MarkedActsService.actsLock) {
+            for (InternalActEntity act : MarkedActsService.getMarked()) {
             /*if(act.getTime().before(now) && act.getEnd().after(now)){
                 newTriggerTime = now.getTimeInMillis();
                 break;
             }*/
-            if (act.getEnd().after(now) &&
-                    newTriggerTime > act.getEnd().getTimeInMillis()) {
-                //END TIME
-                endTime = true;
-                newTriggerTime = act.getEnd().getTimeInMillis();
-            }
-            if (act.getTime().after(now) &&
-                    newTriggerTime > act.getTime().getTimeInMillis()) {
-                //START TIME
-                endTime = false;
-                newTriggerTime = act.getTime().getTimeInMillis();
+                if (act.getEnd().after(now) &&
+                        newTriggerTime > act.getEnd().getTimeInMillis()) {
+                    //END TIME
+                    endTime = true;
+                    newTriggerTime = act.getEnd().getTimeInMillis();
+                }
+                if (act.getTime().after(now) &&
+                        newTriggerTime > act.getTime().getTimeInMillis()) {
+                    //START TIME
+                    endTime = false;
+                    newTriggerTime = act.getTime().getTimeInMillis();
+                }
             }
         }
-        Log.d("NotificationService", "New minTimestamp is " + (newTriggerTime == Long.MAX_VALUE ? "MAX" : newTriggerTime));
+        Log.d(getClass().getSimpleName(), "New minTimestamp is " + (newTriggerTime == Long.MAX_VALUE ? "MAX" : newTriggerTime));
 
         if (newTriggerTime != Long.MAX_VALUE) {
             long delayTime = newTriggerTime;
             if (!endTime)
-                delayTime -= preferences.getInt(PREF_NOTIFICATIONEARLY_TIME, 0) * 60_000;
+                delayTime -= preferences.getInt(PREF_NOTIFICATION_EARLIER_TIME_NAME, 0) * 60_000;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 delayTime -= Calendar.getInstance(TimeZone.getTimeZone("Berlin/Germany"), Locale.GERMANY).getTimeInMillis();
                 JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
@@ -124,7 +123,7 @@ public class NotificationLogic {
                 PersistableBundle extras = new PersistableBundle();
                 extras.putLong(NotificationService.ScheduledNotificationService.EXTRA_TIME, newTriggerTime);
                 builder.setExtras(extras);
-                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
                         .setMinimumLatency(delayTime)
                         .setOverrideDeadline(delayTime + Common.ONE_MIN)
                         .setRequiresCharging(false)
@@ -144,11 +143,11 @@ public class NotificationLogic {
                     alarmManager.set(AlarmManager.RTC_WAKEUP, delayTime, pendingIntent);
                 }
             }
-            preferences.edit().putLong(PREF_NOTIFICATIONTRIGGER_TIME, newTriggerTime).apply();
-            Log.d("NotificationService", "Added new Timer for " + newTriggerTime);
+            preferences.edit().putLong(PREF_NOTIFICATIONTRIGGER_TIME_NAME, newTriggerTime).apply();
+            Log.d(getClass().getSimpleName(), "Added new Timer for " + newTriggerTime);
         } else {
-            preferences.edit().remove(PREF_NOTIFICATIONTRIGGER_TIME).apply();
-            Log.d("NotificationService", "No New Timer to be set");
+            preferences.edit().remove(PREF_NOTIFICATIONTRIGGER_TIME_NAME).apply();
+            Log.d(getClass().getSimpleName(), "No New Timer to be set");
         }
     }
 
@@ -162,27 +161,25 @@ public class NotificationLogic {
         if (time == -1)
             return;
         if (MarkedActsService.getActs().size() == 0) {
-            BusProvider.getInstance().register(this);
-            //FetchTimeTableService.startActionFetchTimetable(context, true, false);
-            FetchTimeTableLogic.getThreadActionFetchTimetable(context, context.getString(R.string.timetable_url), true, false).start();
             try {
-                waitForTimeTable();
+                waitForTimeTable(context,true);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            BusProvider.getInstance().unregister(this);
         }
 
-        Log.d(NotificationService.class.getSimpleName(), "Populated Acts");
+        Log.d(getClass().getSimpleName(), "Populated Acts");
 
         Calendar triggerTime = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"), Locale.GERMANY);
         triggerTime.setTimeInMillis(time);
 
         Set<InternalActEntity> currentActs = new HashSet<>();
-        for (InternalActEntity act : MarkedActsService.getMarked()) {
-            //NOW OR ALREADY PAST and the END in the FUTURE
-            if (act.getTime().compareTo(triggerTime) <= 0 && act.getEnd().compareTo(triggerTime) > 0) {
-                currentActs.add(act);
+        synchronized (MarkedActsService.actsLock) {
+            for (InternalActEntity act : MarkedActsService.getMarked()) {
+                //NOW OR ALREADY PAST and the END in the FUTURE
+                if (act.getTime().compareTo(triggerTime) <= 0 && act.getEnd().compareTo(triggerTime) > 0) {
+                    currentActs.add(act);
+                }
             }
         }
 
@@ -212,25 +209,35 @@ public class NotificationLogic {
                     .setContentIntent(notificationIntent);
             //notificationManager.cancel(NOTIFICATION_ID); //Theoretical can be ignored
             notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
-            Log.d(NotificationService.class.getSimpleName(), "Finished Sending the Notification");
+            Log.d(getClass().getSimpleName(), "Finished Sending the Notification");
         } else {
             notificationManager.cancel(NOTIFICATION_ID);
         }
         handleActionInitNotification(context.getApplicationContext());
     }
 
-    private void waitForTimeTable() throws InterruptedException {
-        synchronized (waitTimeTableLock) {
-            waitTimeTableLock.notify();
-            waitTimeTableLock.wait();
+    private void waitForTimeTable(Context context, boolean thread) throws InterruptedException {
+        BusProvider.getInstance().register(this);
+        Log.d(getClass().getSimpleName(),"Started Waiting for TT");
+        if(thread) {
+            FetchTimeTableLogic.getThreadActionFetchTimetable(context, context.getString(R.string.timetable_url), true, false).start();
+        }else{
+            FetchTimeTableService.startActionFetchTimetable(context, true, false);
         }
+        synchronized (waitForTimeTableLock) {
+            waitForTimeTableLock.notify();
+            waitForTimeTableLock.wait();
+        }
+
+        Log.d(getClass().getSimpleName(),"Finished Waiting for TT");
+        BusProvider.getInstance().unregister(this);
     }
 
     @Subscribe
     public void onDatasetReady(MessageDatasetReady message) {
         if (message.getOrigin().equals(FetchTimeTableService.class)) {
-            synchronized (waitTimeTableLock) {
-                waitTimeTableLock.notify();
+            synchronized (waitForTimeTableLock) {
+                waitForTimeTableLock.notify();
             }
         }
     }
