@@ -6,9 +6,9 @@ public class ActEntity {
     private String end;
 
     public ActEntity(String time, String act, String end) {
-        this.time = time;
+        this.time = time.trim().replaceAll("\"","");
         this.act = act;
-        this.end = end;
+        this.end = end.trim().replaceAll("\"","");
     }
 
     public String getTime() {
@@ -16,7 +16,7 @@ public class ActEntity {
     }
 
     public void setTime(String time) {
-        this.time = time;
+        this.time = time.trim().replaceAll("\"","");
     }
 
     public String getAct() {
@@ -32,7 +32,7 @@ public class ActEntity {
     }
 
     public void setEnd(String end) {
-        this.end = end;
+        this.end = end.trim().replaceAll("\"","");
     }
 
     public String toString(){

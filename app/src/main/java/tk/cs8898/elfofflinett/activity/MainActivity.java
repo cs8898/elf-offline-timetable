@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,12 +29,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TimeZone;
 
 import tk.cs8898.elfofflinett.R;
+import tk.cs8898.elfofflinett.model.bus.BusProvider;
+import tk.cs8898.elfofflinett.model.bus.messages.MessageDatasetChanged;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
 import tk.cs8898.elfofflinett.model.entity.InternalActEntity;
-import tk.cs8898.elfofflinett.receiver.AlarmReceiver;
 import tk.cs8898.elfofflinett.services.FetchTimeTableService;
+import tk.cs8898.elfofflinett.services.NotificationService;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,7 +47,6 @@ public class MainActivity extends AppCompatActivity
 
     private WeekView mWeekView;
 
-    private static final String JSON_URL = "https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/elf18tt_min.json";
     private String currentView;
     private SubMenu filterMenu;
 
@@ -52,7 +55,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentView = MARKED_VIEW;
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -66,14 +68,11 @@ public class MainActivity extends AppCompatActivity
         mWeekView.setMonthChangeListener(mWeekViewListener);
         mWeekView.setEventLongPressListener(mWeekViewListener);
 
-        MarkedActsService.setWeekView(mWeekView);
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mWeekView.goToToday();
-                mWeekView.goToHour(Calendar.getInstance(Locale.GERMANY).get(Calendar.HOUR_OF_DAY));
+                goToToday();
             }
         });
 
@@ -86,11 +85,31 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        currentView = navigationView.getMenu().findItem(R.id.nav_home).isChecked() ? MARKED_VIEW : ALL_VIEW;
+
         filters = new HashSet<>();
         filterMenu = navigationView.getMenu().findItem(R.id.nav_filter_menu).getSubMenu();
+        NotificationService.startActionInitNotification(this);
+    }
 
-        FetchTimeTableService.startActionFetchTimetable(this, JSON_URL);
-        AlarmReceiver.start(this);
+    @Override
+    public void onStart(){
+        super.onStart();
+        //NotificationService.startActionTriggerNotification(this,Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"),Locale.GERMANY).getTimeInMillis());
+        goToToday();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MarkedActsService.saveMarks(getApplicationContext(), true);
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -119,10 +138,10 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            FetchTimeTableService.startActionFetchTimetable(this, JSON_URL);
+            FetchTimeTableService.startActionFetchTimetable(this);
             return true;
-        }else if(id == R.id.action_change_daycount){
-            mWeekView.setNumberOfVisibleDays(mWeekView.getNumberOfVisibleDays()%3+1);
+        } else if (id == R.id.action_change_daycount) {
+            mWeekView.setNumberOfVisibleDays(mWeekView.getNumberOfVisibleDays() % 3 + 1);
         }
 
         return super.onOptionsItemSelected(item);
@@ -168,21 +187,22 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onEventClick(WeekViewEvent event, RectF eventRect) {
-            toggleEvent(event.getId());
+            if (ALL_VIEW.equals(currentView))
+                toggleEvent(event.getIdentifier());
         }
 
         @Override
         public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-            toggleEvent(event.getId());
+            toggleEvent(event.getIdentifier());
         }
 
-        private void toggleEvent(long id){
-            InternalActEntity act = MarkedActsService.findAct(id);
+        private void toggleEvent(String identifier) {
+            InternalActEntity act = MarkedActsService.findAct(identifier);
             if (act != null) {
                 act.setMarked(!act.isMarked());
                 mWeekView.notifyDatasetChanged();
                 MarkedActsService.saveMarks(getApplicationContext());
-                AlarmReceiver.start(getApplicationContext());
+                NotificationService.startActionInitNotification(getApplicationContext());
             }
         }
 
@@ -190,29 +210,33 @@ public class MainActivity extends AppCompatActivity
         public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
             //return null;
             //List<WeekViewEvent> events = getEvents(newYear, newMonth);
-            poulateFilters();
+            populateFilters();
             Collection<InternalActEntity> acts;
             switch (currentView) {
                 case MARKED_VIEW:
+                    //Log.d("MainActivity", "Marked View");
                     acts = MarkedActsService.getMarked();
                     break;
                 case ALL_VIEW:
+                    //Log.d("MainActivity", "All View");
                     acts = MarkedActsService.getActs();
                     break;
                 default:
+                    Log.e("MainActivity", "No Current view was set");
                     acts = new ArrayList<>();
                     break;
             }
+            //Log.d("MainActivity", "Loading events for " + newYear + "-" + newMonth);
             List<WeekViewEvent> eventsList = new ArrayList<>();
             for (InternalActEntity act : acts) {
                 Calendar actStart = act.getTime();
                 Calendar actEnd = act.getEnd();
                 if (actStart != null && actEnd != null) {
-                    if (actStart.get(Calendar.YEAR) == newYear && actStart.get(Calendar.MONTH) == newMonth) {
+                    if (actStart.get(Calendar.YEAR) == newYear && actStart.get(Calendar.MONTH) == newMonth - 1) {
                         //FILTERS
                         if (filters.contains(act.getLocation()))
                             continue;
-                        WeekViewEvent event = new WeekViewEvent(act.getId(), act.getName(), act.getLocation(), actStart, actEnd);
+                        WeekViewEvent event = new WeekViewEvent(act.toString(), act.getName(), act.getLocation(), actStart, actEnd);
                         event.setColor(act.getColor(getApplicationContext()));
                         eventsList.add(event);
                     }
@@ -222,7 +246,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void poulateFilters() {
+    private void populateFilters() {
         filterMenu.clear();
         //filters.clear();
         int i = 0;
@@ -237,9 +261,30 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onDestroy(){
-        MarkedActsService.saveMarks(getApplicationContext(),true);
-        super.onDestroy();
+    private void goToToday(){
+        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"), Locale.GERMANY);
+        if(mWeekView.getMinDate()!=null && now.before(mWeekView.getMinDate())){
+            mWeekView.goToDate(mWeekView.getMinDate());
+        }else if(mWeekView.getMaxDate()!=null && now.after(mWeekView.getMaxDate())){
+            mWeekView.goToDate(mWeekView.getMaxDate());
+        }else{
+            mWeekView.goToDate(now);
+            mWeekView.goToHour(now.get(Calendar.HOUR_OF_DAY));
+        }
+    }
+
+    @Subscribe
+    public void onDatasetChanged(MessageDatasetChanged message){
+        if(!message.getOrigin().equals(MainActivity.class)){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mWeekView.setMinDate(MarkedActsService.getMinDate());
+                    mWeekView.setMaxDate(MarkedActsService.getMaxDate());
+                    mWeekView.invalidate();
+                    mWeekView.notifyDatasetChanged();
+                }
+            });
+        }
     }
 }

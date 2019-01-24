@@ -19,35 +19,35 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.LicenseActivity"
-            android:label="@string/title_activity_licence" />
+            android:label="@string/title_activity_licence"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".services.FetchTimeTableService"
             android:exported="false" />
 
-        <receiver
-            android:name=".receiver.AutostartReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+        <service
+            android:name=".services.NotificationService"
+            android:exported="false" />
+        <service android:name=".services.NotificationService$ScheduledNotificationService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+
         <receiver
             android:name=".receiver.AlarmReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="tk.cs8898.elfofflinett.action.initnotification" />
+                <action android:name="tk.cs8898.elfofflinett.alarm.triggernotification" />
             </intent-filter>
         </receiver>
     </application>
