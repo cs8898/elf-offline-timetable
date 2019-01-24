@@ -69,6 +69,7 @@ public class NotificationService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
+            BusProvider.getInstance().register(this);
             final String action = intent.getAction();
             if (ACTION_INIT_NOTIFICATION.equals(action)) {
                 new NotificationLogic().handleActionInitNotification(this.getApplicationContext());
@@ -76,6 +77,7 @@ public class NotificationService extends IntentService {
                 final long time = intent.getLongExtra(EXTRA_TIME, -1);
                 new NotificationLogic().handleActionTriggerNotification(this.getApplicationContext(),time);
             }
+            BusProvider.getInstance().unregister(this);
         }
         stopSelf();
     }
@@ -99,6 +101,22 @@ public class NotificationService extends IntentService {
         @Override
         public boolean onStopJob(JobParameters params) {
             return false;
+        }
+    }
+
+    private void waitForTimeTable() throws InterruptedException{
+        synchronized (waitTimeTableLock){
+            waitTimeTableLock.notify();
+            waitTimeTableLock.wait();
+        }
+    }
+
+    @Subscribe
+    public void onDatasetReady(MessageDatasetReady message){
+        if(message.getOrigin().equals(FetchTimeTableService.class)){
+            synchronized (waitTimeTableLock) {
+                waitTimeTableLock.notify();
+            }
         }
     }
 }

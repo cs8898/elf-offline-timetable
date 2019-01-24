@@ -94,6 +94,7 @@ public class MarkedActsService {
         if (acts != null) {
             SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
             Set<String> markSet = preferences.getStringSet(MARKED_NAME, new HashSet<String>());
+            assert markSet != null;
             for (String marked : markSet) {
                 //Log.d("MarkedActsService", "Marking " + marked);
                 synchronized (actsLock) {
@@ -142,6 +143,18 @@ public class MarkedActsService {
                 }
         }
         return locations;
+    }
+
+    public static Set<StageEntity> getStages() {
+        HashSet<StageEntity> stages = new HashSet<>();
+
+        synchronized (actsLock) {
+            if (acts != null)
+                for (InternalActEntity act : acts) {
+                    stages.add(act.getStage());
+                }
+        }
+        return stages;
     }
 
     public static Calendar getMinDate() {
