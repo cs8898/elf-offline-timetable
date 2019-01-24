@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -116,7 +117,7 @@ public class MarkedActsService {
     private static void loadMarks(Context context) {
         if (acts != null) {
             SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
-            Set<String> markSet = preferences.getStringSet(PREF_MARKED_NAME, new HashSet<String>());
+            Set<String> markSet = preferences.getStringSet(PREF_MARKED_NAME, new HashSet<>());
 
             assert markSet != null;
             Log.d(MarkedActsService.class.getSimpleName(), "Loaded " + markSet.size() + " Marks from Prefs");
@@ -210,9 +211,10 @@ public class MarkedActsService {
 
         synchronized (actsLock) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                InternalActEntity act = acts.parallelStream().min((a, b) -> a.getTime().compareTo(b.getTime())).orElseGet(null);
-                if (act != null)
-                    min = act.getTime();
+                Optional<InternalActEntity> act = acts.parallelStream()
+                        .min((a, b) -> a.getTime().compareTo(b.getTime()));
+                if (act.isPresent())
+                    min = act.get().getTime();
             } else {
                 for (InternalActEntity act : acts) {
                     if (min == null || act.getTime().before(min)) {
@@ -229,9 +231,10 @@ public class MarkedActsService {
 
         synchronized (actsLock) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                InternalActEntity act = acts.parallelStream().max((a, b) -> a.getEnd().compareTo(b.getEnd())).orElseGet(null);
-                if (act != null)
-                    max = act.getEnd();
+                Optional<InternalActEntity> act = acts.parallelStream()
+                        .max((a, b) -> a.getEnd().compareTo(b.getEnd()));
+                if (act.isPresent())
+                    max = act.get().getEnd();
             } else {
                 for (InternalActEntity act : acts) {
                     if (max == null || act.getEnd().after(max)) {
