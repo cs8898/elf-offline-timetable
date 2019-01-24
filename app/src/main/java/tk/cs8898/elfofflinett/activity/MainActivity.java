@@ -117,6 +117,13 @@ public class MainActivity extends AppCompatActivity
         MarkedActsService.saveMarks(getApplicationContext(), true);
         BusProvider.getInstance().unregister(this);
     }
+    
+    @Override
+    public void onDestroy() {
+        MarkedActsService.saveMarks(getApplicationContext(), true);
+        BusProvider.getInstance().unregister(this);
+        super.onDestroy();
+    }
 
     @Override
     public void onBackPressed() {
