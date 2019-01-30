@@ -61,8 +61,9 @@ public class NotificationService extends IntentService {
             if (ACTION_INIT_NOTIFICATION.equals(action)) {
                 new NotificationLogic().handleActionInitNotification(this.getApplicationContext());
             } else if (ACTION_TRIGGER_NOTIFICATION.equals(action)) {
-                final long time = intent.getLongExtra(EXTRA_TIME, -1);
-                new NotificationLogic().handleActionTriggerNotification(this.getApplicationContext(),time);
+                //final long time = intent.getLongExtra(EXTRA_TIME, -1);
+                //new NotificationLogic().handleActionTriggerNotification(this.getApplicationContext(),time);
+                new NotificationLogic().handleActionTriggerNotification(this.getApplicationContext());
             }
         }
         stopSelf();
@@ -79,7 +80,8 @@ public class NotificationService extends IntentService {
             if (params.getJobId() == INIT_JOB_ID) {
                 new NotificationLogic().handleActionInitNotification(this);
             }else if (params.getJobId() == NOTIFY_JOB_ID) {
-                new NotificationLogic().handleActionTriggerNotification(this, params.getExtras().getLong(EXTRA_TIME, -1));
+                //new NotificationLogic().handleActionTriggerNotification(this, params.getExtras().getLong(EXTRA_TIME, -1));
+                new NotificationLogic().handleActionTriggerNotification(this);
             }
             return false;
         }

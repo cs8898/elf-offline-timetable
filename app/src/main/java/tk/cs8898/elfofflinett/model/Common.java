@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 
 public class Common {
-    public static final int ONE_MIN = 60*1000;
+    public static final int ONE_MIN = 60_000;
 
     //Main Activity
     public static final String ACTIVITY_VIEW_MARKED = "tk.cs8898.elfofflinett.view.marked";
@@ -13,14 +13,22 @@ public class Common {
     //PREFERENCES
     public static final String PREFERENCES_NAME = "tk.cs8898.elfofflinett.preferences";
     /**
+     * Auto Started When already started is set to True
+     */
+    public static final String PREF_AUTOSTARTED_NAME = "autostarted";
+    /**
      * The Time Value of the now staring Event
      */
-    public static final String PREF_NOTIFICATIONTRIGGER_TIME_NAME = "notificationtime";
+    public static final String PREF_NOTIFICATION_TRIGGER_TIME_NAME = "notificationtime";
 
     /**
-     * The Time when the Last trigger has bin executed
+     * The Time when the Last CurrentlyOnStafe trigger has been executed
      */
-    public static final String PREF_ALREADY_TRIGGERED_TIME = "alreadytrigeredtime";
+    public static final String PREF_NOTIFICATION_LAST_SHOWN_ONSTAGE_TIME_NAME = "notificationshownonstagetime";
+    /**
+     * The Time when the Last Upcomeing trigger has been executed
+     */
+    public static final String PREF_NOTIFICATION_LAST_SHOWN_UPCOMING_TIME_NAME = "notificationshownupcomingtime";
     /**
      * How many minutes does the notification come earlier
      */

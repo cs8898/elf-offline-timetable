@@ -2,8 +2,8 @@ package tk.cs8898.elfofflinett.activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Build;
@@ -51,7 +51,10 @@ import tk.cs8898.elfofflinett.services.NotificationService;
 import static tk.cs8898.elfofflinett.model.Common.ACTIVITY_VIEW_ALL;
 import static tk.cs8898.elfofflinett.model.Common.ACTIVITY_VIEW_MARKED;
 import static tk.cs8898.elfofflinett.model.Common.PREFERENCES_NAME;
+import static tk.cs8898.elfofflinett.model.Common.PREF_AUTOSTARTED_NAME;
 import static tk.cs8898.elfofflinett.model.Common.PREF_NOTIFICATION_EARLIER_TIME_NAME;
+import static tk.cs8898.elfofflinett.model.Common.PREF_NOTIFICATION_LAST_SHOWN_ONSTAGE_TIME_NAME;
+import static tk.cs8898.elfofflinett.model.Common.PREF_NOTIFICATION_LAST_SHOWN_UPCOMING_TIME_NAME;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -113,13 +116,25 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         BusProvider.getInstance().register(this);
-        try {
-            FetchTimeTableService.startActionFetchTimetable(this, true, true);
-            NotificationService.startActionInitNotification(this);
-        } catch (IllegalStateException e) {
-            Log.d("MainActivity", "The App is in Background Using Scheduler Now");
-            FetchTimeTableService.scheduleFetchTimetable(this, true, true);
-            NotificationService.scheduleInitNotification(this);
+        SharedPreferences prefs = getSharedPreferences(PREFERENCES_NAME,MODE_PRIVATE);
+        boolean autoStarted = prefs.getBoolean(PREF_AUTOSTARTED_NAME,false);
+        if(!autoStarted){
+            Log.d("MainActivity","Was not Autostarted Need To Start services now");
+            getSharedPreferences(PREFERENCES_NAME,MODE_PRIVATE).edit()
+                    .remove(PREF_NOTIFICATION_LAST_SHOWN_ONSTAGE_TIME_NAME)
+                    .remove(PREF_NOTIFICATION_LAST_SHOWN_UPCOMING_TIME_NAME)
+                    .apply();
+            try {
+                FetchTimeTableService.startActionFetchTimetable(this, true, true);
+                NotificationService.startActionInitNotification(this);
+            } catch (IllegalStateException e) {
+                Log.d("MainActivity", "The App is in Background Using Scheduler Now");
+                FetchTimeTableService.scheduleFetchTimetable(this, true, true);
+                NotificationService.scheduleInitNotification(this);
+            }
+        }else{
+            Log.d("MainActivity","I Was Autostarted, so i wont init the Notifications, but will trigger a redraw");
+            //BusProvider.getInstance().post(new MessageDatasetChanged(Object.class));
         }
     }
 
@@ -131,12 +146,14 @@ public class MainActivity extends AppCompatActivity
         BusProvider.getInstance().unregister(this);
     }
     
-    /*@Override
+    @Override
     public void onDestroy() {
-        MarkedActsService.saveMarks(getApplicationContext(), true);
-        BusProvider.getInstance().unregister(this);
+        Log.d("MainActivity", "Here is the Destroy!!!");
+        getSharedPreferences(PREFERENCES_NAME,MODE_PRIVATE).edit()
+                .putBoolean(PREF_AUTOSTARTED_NAME,false)
+                .commit();
         super.onDestroy();
-    }*/
+    }
 
     @Override
     public void onBackPressed() {
@@ -244,17 +261,18 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onEventClick(WeekViewEvent event, RectF eventRect) {
-            if (ACTIVITY_VIEW_ALL.equals(currentView))
-                toggleEvent(event.getIdentifier());
+            if (ACTIVITY_VIEW_ALL.equals(currentView)){
+                toggleEvent(event);
+            }
         }
 
         @Override
         public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-            toggleEvent(event.getIdentifier());
+            toggleEvent(event);
         }
 
-        private void toggleEvent(String identifier) {
-            InternalActEntity act = MarkedActsService.findAct(identifier);
+        private void toggleEvent(WeekViewEvent event) {
+            InternalActEntity act = MarkedActsService.findAct(event.getIdentifier());
             if (act != null) {
                 act.setMarked(!act.isMarked());
                 mWeekView.notifyDatasetChanged();
@@ -284,17 +302,15 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
 
-            Log.d("MainActivity", "Redrawing with " + acts.size() + " Acts");
+            //Log.d("MainActivity", "Redrawing with " + acts.size() + " Acts");
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Log.d("MainActivity", "USING STREAM");
-                List<WeekViewEvent> eventsList = acts.parallelStream()
+                //Log.d("MainActivity", "USING STREAM");
+                return acts.parallelStream()
                         .filter(e -> !filters.contains(e.getLocation()) &&
                                 newYear == e.getTime().get(Calendar.YEAR) &&
                                 newMonth - 1 == e.getTime().get(Calendar.MONTH))
                         .map(this::buildEvent).collect(Collectors.toList());
-                Log.d("MainActivity", "Streamed to " + eventsList.size() + " Elements");
-                return eventsList;
             } else {
                 List<WeekViewEvent> eventsList = new ArrayList<>();
                 for (InternalActEntity act : acts) {

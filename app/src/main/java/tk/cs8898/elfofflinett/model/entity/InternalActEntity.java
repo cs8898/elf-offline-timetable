@@ -64,7 +64,7 @@ public class InternalActEntity {
             cal.setTime(dateFormat.parse(this.act.getTime()));
         } catch (Exception e) {
             //e.printStackTrace();
-            Log.d("InternalActEntry", this.act.getAct()+" Time is "+this.act.getTime());
+            //Log.d("InternalActEntry", this.act.getAct()+" Time is "+this.act.getTime());
             cal.setTimeInMillis(0);
             //return null;
         }
