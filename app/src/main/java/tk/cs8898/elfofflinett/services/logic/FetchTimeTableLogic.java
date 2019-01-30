@@ -20,8 +20,8 @@ import okhttp3.ResponseBody;
 import tk.cs8898.elfofflinett.model.Common;
 import tk.cs8898.elfofflinett.model.bus.BusProvider;
 import tk.cs8898.elfofflinett.model.bus.messages.MessageDatasetReady;
+import tk.cs8898.elfofflinett.model.bus.messages.MessageOnlineNotFetchable;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
-import tk.cs8898.elfofflinett.model.entity.ActEntity;
 import tk.cs8898.elfofflinett.model.entity.StageEntity;
 import tk.cs8898.elfofflinett.services.FetchTimeTableService;
 
@@ -40,19 +40,29 @@ public class FetchTimeTableLogic {
     }
 
     public static void handleActionFetchTimetable(Context context, String url, boolean offline, boolean update) {
+        boolean success = false;
         if(!LOAD_LOCK.tryLock()) {
             Log.d(FetchTimeTableLogic.class.getSimpleName(),"There is already some Fetch running");
             return;
         }
         if(!loadOffline(context, update)){
             offline=false;//Force Loading Online when there was no offline file
+        }else{
+            success=true;
         }
         if (!offline && Common.isOnline(context)) {
-            if(fetchOnline(context, url))
-                loadOffline(context, update);
+            if(fetchOnline(context, url)) {
+                success = loadOffline(context, update);
+            }else {
+                success = false;
+            }
         }
-        BusProvider.getInstance().post(new MessageDatasetReady(FetchTimeTableService.class));
         LOAD_LOCK.unlock();
+        BusProvider.getInstance().post(new MessageDatasetReady(FetchTimeTableService.class));
+        if(!success) {
+            Log.d(FetchTimeTableLogic.class.getSimpleName(), "No success in fetching the timetable.");
+            BusProvider.getInstance().post(new MessageOnlineNotFetchable(FetchTimeTableService.class));
+        }
     }
 
     private static boolean fetchOnline(Context context, String url) {
@@ -65,8 +75,12 @@ public class FetchTimeTableLogic {
         try {
             Response response = okHttpClient.newCall(request).execute();
             ResponseBody body = response.body();
+            if (response.code() == 404) {
+                // HERE WE COULD INVALIDATE THE OLD OFFLINE FILE
+                return false;
+            }
             if (body == null)
-                throw new IOException("Can't get response Body Online");
+                return false;
             String json = body.string();
             FileOutputStream fileOutputStream = context.openFileOutput(LOCAL_FILE, Context.MODE_PRIVATE);
             PrintWriter printWriter = new PrintWriter(fileOutputStream);
@@ -99,6 +113,8 @@ public class FetchTimeTableLogic {
             }catch (JsonSyntaxException e){
                 return false;
             }
+            /*
+            //DEBUG EVENTS
             stages[0].getActs().clear();
             stages[1].getActs().clear();
             stages[2].getActs().clear();
@@ -111,6 +127,7 @@ public class FetchTimeTableLogic {
                     stages[3].getActs().add(new ActEntity("January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":45", "3-" + d + "-" + h, "January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", (h+1)%24) + ":15"));
                 }
             }
+            */
             MarkedActsService.setAllActs(context.getApplicationContext(), stages, update);
             Log.d("FetchTimeTableService", "fetched " + stages.length + " stages");
             return true;

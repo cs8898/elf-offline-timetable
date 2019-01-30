@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 import tk.cs8898.elfofflinett.R;
 import tk.cs8898.elfofflinett.model.bus.BusProvider;
 import tk.cs8898.elfofflinett.model.bus.messages.MessageDatasetChanged;
+import tk.cs8898.elfofflinett.model.bus.messages.MessageOnlineNotFetchable;
 import tk.cs8898.elfofflinett.model.database.MarkedActsService;
 import tk.cs8898.elfofflinett.model.entity.InternalActEntity;
 import tk.cs8898.elfofflinett.model.entity.StageEntity;
@@ -149,9 +150,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDestroy() {
         Log.d("MainActivity", "Here is the Destroy!!!");
+        //Shouldn't be needed
         getSharedPreferences(PREFERENCES_NAME,MODE_PRIVATE).edit()
                 .putBoolean(PREF_AUTOSTARTED_NAME,false)
-                .commit();
+                .apply();
         super.onDestroy();
     }
 
@@ -195,11 +197,16 @@ public class MainActivity extends AppCompatActivity
             int earlier_time = getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).getInt(PREF_NOTIFICATION_EARLIER_TIME_NAME, 0);
             bar.setProgress(earlier_time);
 
-            builder.setView(bar);
-            builder.setCancelable(true);
-            builder.setTitle(String.format(Locale.GERMAN, "Notification %d minutes before start.", earlier_time));
-            builder.setPositiveButton("Apply", (dialog, which) -> getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit().putInt(PREF_NOTIFICATION_EARLIER_TIME_NAME,
-                    bar.getProgress()).apply());
+            builder.setView(bar)
+                    .setCancelable(true)
+                    .setTitle(
+                            String.format(Locale.GERMAN, "Notification %d minutes before start.", earlier_time))
+                    .setPositiveButton("Apply",
+                            (dialog, which) ->
+                                    getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
+                                            .putInt(PREF_NOTIFICATION_EARLIER_TIME_NAME, bar.getProgress())
+                                            .apply()
+                    );
             final AlertDialog dialog = builder.show();
             bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
@@ -376,5 +383,18 @@ public class MainActivity extends AppCompatActivity
                 mWeekView.notifyDatasetChanged();
             });
         }
+    }
+
+    @Subscribe
+    public void onOnlineNotFetchable(MessageOnlineNotFetchable message){
+        Log.d("MainActivity", "triggered Fetch Error");
+        runOnUiThread(()->{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.alert_online_not_available_title)
+                    .setMessage(R.string.alert_online_not_available_message)
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.accept_string,null)
+                    .show();
+        });
     }
 }
