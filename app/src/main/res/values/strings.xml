@@ -1,17 +1,13 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!--<string name="app_name">ELF 18 OfflineTimetable</string>-->
+<resources>
+    <string name="nav_header_subtitle" translatable="false">Another Timetable App</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <!--<string name="nav_header_title">Electric Love Festival 2018</string>-->
-    <string name="nav_header_subtitle">Another Timetable App</string>
-    <!--<string name="nav_header_desc">Navigation header</string>-->
     <string name="action_refresh">Refresh</string>
-    <string name="title_activity_licence">OpenSource-Lizenzen</string>
+    <string name="title_activity_licence">OpenSource-Licences</string>
     <string name="nav_home_text">My Timetable</string>
     <string name="nav_all_text">Full Timetable</string>
     <string name="filters">Filters</string>
     <string name="other">Other</string>
     <string name="switch_display_days">Switch Display Days</string>
     <string name="notification_earlier_time">Notification Settings</string>
-    <!--<string name="timetable_url">https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/elf18tt_min.json</string>-->
 </resources>
