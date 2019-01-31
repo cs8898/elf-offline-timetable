@@ -9,6 +9,7 @@ Here is an other approach...
 What you can do:
 - you can mark your favourite gigs
 - get notifications when an act starts
+- get notifications for upcoming events
 - filter by stages
 - use it offline
 - can be migrated to other festivals
@@ -29,12 +30,12 @@ Screenshots:
 Thanks:
 -------
 
-I'd like to thank Philipp for the JSON
+I'd like to thank Philipp for the ELF18 JSON
 
 License:
 --------
 ```
-Copyright © 2018 Christian Schmied <cs8898@gmx.de>
+Copyright © 2019 Christian Schmied <cs8898@gmx.de>
 This work is free. You can redistribute it and/or modify it under the
 terms of the Do What The Fuck You Want To Public License, Version 2,
 as published by Sam Hocevar. See the LICENSE file for more details.
