@@ -1,16 +1,5 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Frequency 18 OfflineTimetable</string>
-    <!--<string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>-->
-    <string name="nav_header_title">FM4 Frequency Festival 2018</string>
-    <!--<string name="nav_header_subtitle">Another Timetable App</string>-->
-    <!--<string name="nav_header_desc">Navigation header</string>-->
-    <!--<string name="action_refresh">Refresh</string>
-    <string name="title_activity_licence">OpenSource-Lizenzen</string>
-    <string name="nav_home_text">My Timetable</string>
-    <string name="nav_all_text">Full Timetable</string>
-    <string name="filters">Filters</string>
-    <string name="other">Other</string>
-    <string name="switch_display_days">Switch Display Days</string>-->
-    <string name="timetable_url">https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/fm4frequency18tt_min.json</string>
+<resources>
+    <string name="app_name" translatable="false">Frequency 18 OfflineTimetable</string>
+    <string name="nav_header_title" translatable="false">FM4 Frequency Festival 2018</string>
+    <string name="timetable_url" translatable="false">https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/fm4frequency18tt_min.json</string>
 </resources>

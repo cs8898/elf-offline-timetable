@@ -26,6 +26,7 @@
         app:todayBackgroundColor="#184CAF50"
         app:headerColumnBackground="#ffffffff"
         app:showNowLine="true"
-        app:nowLineColor="@color/colorAccent"/>
+        app:nowLineColor="@color/colorAccent"
+        app:priorityOrdering="true"/>
 
 </android.support.constraint.ConstraintLayout>

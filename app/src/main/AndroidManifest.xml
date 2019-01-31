@@ -34,6 +34,9 @@
         <service
             android:name=".services.FetchTimeTableService"
             android:exported="false" />
+        <service android:name=".services.FetchTimeTableService$ScheduledFetchTimetableService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <service
             android:name=".services.NotificationService"
@@ -50,6 +53,15 @@
                 <action android:name="tk.cs8898.elfofflinett.alarm.triggernotification" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".receiver.AutostartReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
