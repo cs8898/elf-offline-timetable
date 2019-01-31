@@ -1,4 +1,8 @@
 # elf-offline-timetable
+
+### 📱 [![Build Status](https://jenkins.hive.ddnss.de/buildStatus/icon?job=AndroidApps/elf-offline-timetablePRODUCTION)](https://jenkins.hive.ddnss.de/job/AndroidApps/elf-offline-timetablePRODUCTION)
+### 👨‍💻  [![Build Status](https://jenkins.hive.ddnss.de/buildStatus/icon?job=AndroidApps/elf-offline-timetableINTERNAL)](https://jenkins.hive.ddnss.de/job/AndroidApps/elf-offline-timetableINTERNAL)
+
 ![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-1.png)
 
 We all know the ELF app isn't the best
