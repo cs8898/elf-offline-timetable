@@ -9,4 +9,4 @@
 /captures
 .externalNativeBuild
 /keystore.properties
-/.idea/cache
+\.idea/caches/
