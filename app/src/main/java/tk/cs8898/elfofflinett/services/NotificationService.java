@@ -9,7 +9,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import tk.cs8898.elfofflinett.services.logic.NotificationLogic;
 

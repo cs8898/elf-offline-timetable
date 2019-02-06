@@ -34,7 +34,8 @@ Screenshots:
 Thanks:
 -------
 
-I'd like to thank Philipp for the ELF18 JSON
+I'd like to thank Philipp for the ELF18 JSON  
+and the dudes at volume.at for their API (Frequency and NovaRock)
 
 License:
 --------
