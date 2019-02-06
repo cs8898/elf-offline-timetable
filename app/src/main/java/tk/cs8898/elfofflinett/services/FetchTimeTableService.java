@@ -8,17 +8,13 @@ import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.Context;
-import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.PersistableBundle;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.util.Log;
 
 import tk.cs8898.elfofflinett.R;
 import tk.cs8898.elfofflinett.services.logic.FetchTimeTableLogic;
-import tk.cs8898.elfofflinett.services.logic.NotificationLogic;
-
-import static tk.cs8898.elfofflinett.services.NotificationService.ScheduledNotificationService.NOTIFY_JOB_ID;
 
 /**
  * Fetches the TimeTable from the url provided by @string/timetableurl

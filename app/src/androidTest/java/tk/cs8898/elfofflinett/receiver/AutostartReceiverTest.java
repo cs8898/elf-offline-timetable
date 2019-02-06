@@ -1,17 +1,14 @@
 package tk.cs8898.elfofflinett.receiver;
 
-import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.test.InstrumentationRegistry;
+import androidx.test.InstrumentationRegistry;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import tk.cs8898.elfofflinett.model.Common;
-
-import static org.junit.Assert.*;
 
 public class AutostartReceiverTest {
 
