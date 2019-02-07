@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Frequency 18 OfflineTimetable</string>
-    <string name="nav_header_title" translatable="false">FM4 Frequency Festival 2018</string>
-    <string name="timetable_url" translatable="false">https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/fm4frequency18tt_min.json</string>
+    <string name="app_name" translatable="false">Frequency 19 OfflineTimetable</string>
+    <string name="nav_header_title" translatable="false">FM4 Frequency Festival 2019</string>
+    <string name="timetable_url" translatable="false">https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/fm4frequency19tt_min.json</string>
 </resources>
