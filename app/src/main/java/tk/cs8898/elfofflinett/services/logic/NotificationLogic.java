@@ -12,15 +12,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PersistableBundle;
+
 import androidx.core.app.NotificationCompat;
+
 import android.util.Log;
 
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
@@ -98,38 +103,10 @@ public class NotificationLogic {
             }
         }
 
-        long newTriggerTime = Long.MAX_VALUE;
-        int type = -1;
-        //FIND MINIMUM CHANGE TIME FOR NOTIFICATION AFTER LAST SHOWN
-        synchronized (MarkedActsService.actsLock) {
-            for (InternalActEntity act : MarkedActsService.getMarked()) {
-                /*if(!act.getTime().after(now))
-                    continue;*/
-                if (act.getTime().before(now) &&
-                        act.getEnd().getTimeInMillis() > lastOnstageCalendar.getTimeInMillis() &&
-                        newTriggerTime > act.getEnd().getTimeInMillis()) {
-                    //END TIME
-                    type = 0;
-                    newTriggerTime = act.getEnd().getTimeInMillis();
-                }
-                if (act.getTime().after(now) &&
-                        act.getTime().getTimeInMillis() > lastOnstageCalendar.getTimeInMillis() &&
-                        newTriggerTime > act.getTime().getTimeInMillis()) {
-                    //START TIME
-                    type = 1;
-                    newTriggerTime = act.getTime().getTimeInMillis();
-                }
-                if (act.getTime().after(now) &&
-                        lastUpcomingCalendar.getTimeInMillis() < act.getTime().getTimeInMillis() - upcomingOffsetValue &&
-                        newTriggerTime > act.getTime().getTimeInMillis() - upcomingOffsetValue) {
-                    //UPCOMING TIME
-                    type = 2;
-                    newTriggerTime = act.getTime().getTimeInMillis() - upcomingOffsetValue;
-                }
-            }
-        }
+        long newTriggerTime = findNextTriggerTime(now, lastOnstageCalendar, lastUpcomingCalendar, upcomingOffsetValue);
+
         Log.d(getClass().getSimpleName(), "New lastUpcoming is " + lastUpcomingCalendar.getTimeInMillis());
-        Log.d(getClass().getSimpleName(), "New minTimestamp is " + (newTriggerTime == Long.MAX_VALUE ? "MAX" : newTriggerTime) + " as Type " + type);
+        Log.d(getClass().getSimpleName(), "New minTimestamp is " + (newTriggerTime == Long.MAX_VALUE ? "MAX" : newTriggerTime));
         if (newTriggerTime != Long.MAX_VALUE) {
             long alarmTime = newTriggerTime;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -175,7 +152,7 @@ public class NotificationLogic {
     /**
      * removes the old notification and adds the new one
      * <p>
-     * //* @param time the time wher the Events are Starting
+     * //* @param time the time at which the events begin
      */
     public void handleActionTriggerNotification(Context context) {//, long time) {
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -201,45 +178,19 @@ public class NotificationLogic {
         //Calendar triggerTimeCal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"), Locale.GERMANY);
         //triggerTimeCal.setTimeInMillis(triggerTime);
 
-        Set<InternalActEntity> currentActs;
-        Set<InternalActEntity> upcomingActs;
-        synchronized (MarkedActsService.actsLock) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                currentActs = MarkedActsService.getMarked().parallelStream()
-                        .filter(e -> e.getTime().compareTo(now) <= 0 &&
-                                e.getEnd().compareTo(now) > 0)
-                        .collect(Collectors.toSet());
-                upcomingActs = MarkedActsService.getMarked().parallelStream()
-                        .filter(e -> e.getTime().after(now) &&
-                                e.getTime().getTimeInMillis() - now.getTimeInMillis() <= upcomingOffsetValue)
-                        .collect(Collectors.toSet());
-            } else {
-                currentActs = new HashSet<>();
-                for (InternalActEntity act : MarkedActsService.getMarked()) {
-                    //NOW OR ALREADY PAST and the END in the FUTURE
-                    if (act.getTime().compareTo(now) <= 0 &&
-                            act.getEnd().compareTo(now) > 0) {
-                        currentActs.add(act);
-                    }
-                }
-                upcomingActs = new HashSet<>();
-                for (InternalActEntity act : MarkedActsService.getMarked()) {
-                    if (act.getTime().after(now) &&
-                            act.getTime().getTimeInMillis() - now.getTimeInMillis() <= upcomingOffsetValue) {
-                        upcomingActs.add(act);
-                    }
-                }
-            }
-        }
+        Collection<InternalActEntity> currentActs = getCurrentActs(now);
+        Collection<InternalActEntity> upcomingActs = getUpcomingActs(now, upcomingOffsetValue);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         assert notificationManager != null;
         showCurrentNotification(context, notificationManager, currentActs, triggerTime);
-        showUpcomeingNotification(context, notificationManager, upcomingActs, triggerTime);
+        showUpcomingNotification(context, notificationManager, upcomingActs, triggerTime);
+
+        //INIT THE NEXT NOTIFICATIONS
         handleActionInitNotification(context.getApplicationContext());
     }
 
-    private void showCurrentNotification(Context context, NotificationManager notificationManager, Set<InternalActEntity> currentActs, long triggerTime) {
+    private void showCurrentNotification(Context context, NotificationManager notificationManager, Collection<InternalActEntity> currentActs, long triggerTime) {
         if (currentActs.size() > 0) {
             StringBuilder notificationBody = new StringBuilder();
             for (InternalActEntity act : currentActs) {
@@ -283,7 +234,7 @@ public class NotificationLogic {
 
     }
 
-    private void showUpcomeingNotification(Context context, NotificationManager notificationManager, Set<InternalActEntity> upcomingActs, long triggerTime) {
+    private void showUpcomingNotification(Context context, NotificationManager notificationManager, Collection<InternalActEntity> upcomingActs, long triggerTime) {
         if (upcomingActs.size() > 0) {
             StringBuilder notificationBody = new StringBuilder();
             for (InternalActEntity act : upcomingActs) {
@@ -337,6 +288,90 @@ public class NotificationLogic {
 
         Log.d(getClass().getSimpleName(), "Finished Waiting for TT");
         BusProvider.getInstance().unregister(this);
+    }
+
+    /**
+     * Finds the next change in the TimeTable
+     *
+     * @param now            the current time
+     * @param lastOnstage    the last shown on stage
+     * @param lastUpcoming   the last shown upcoming
+     * @param upcomingOffset how many MS should an upcoming be triggered before the actual start
+     * @return the Timestamp for the next Notification Trigger
+     */
+    public static long findNextTriggerTime(Calendar now, Calendar lastOnstage, Calendar lastUpcoming, long upcomingOffset) {
+        long newTriggerTime = Long.MAX_VALUE;
+        //FIND MINIMUM CHANGE TIME FOR NOTIFICATION AFTER LAST SHOWN
+        synchronized (MarkedActsService.actsLock) {
+            for (InternalActEntity act : MarkedActsService.getMarked()) {
+                /*if(!act.getTime().after(now))
+                    continue;*/
+                if (act.getTime().before(now) &&
+                        act.getEnd().getTimeInMillis() > lastOnstage.getTimeInMillis() &&
+                        newTriggerTime > act.getEnd().getTimeInMillis()) {
+                    //END TIME
+                    newTriggerTime = act.getEnd().getTimeInMillis();
+                }
+                if (act.getTime().after(now)) {
+                    if (act.getTime().getTimeInMillis() > lastOnstage.getTimeInMillis() &&
+                            newTriggerTime > act.getTime().getTimeInMillis()) {
+                        //START TIME
+                        newTriggerTime = act.getTime().getTimeInMillis();
+                    }
+                    if (lastUpcoming.getTimeInMillis() < act.getTime().getTimeInMillis() - upcomingOffset &&
+                            newTriggerTime > act.getTime().getTimeInMillis() - upcomingOffset) {
+                        //UPCOMING TIME
+                        newTriggerTime = act.getTime().getTimeInMillis() - upcomingOffset;
+                    }
+                }
+            }
+        }
+        return newTriggerTime;
+    }
+
+    public static List<InternalActEntity> getCurrentActs(Calendar now) {
+        synchronized (MarkedActsService.actsLock) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                return MarkedActsService.getMarked().parallelStream()
+                        .filter(e -> e.getTime().compareTo(now) <= 0 &&
+                                e.getEnd().compareTo(now) > 0)
+                        .sorted(Comparator.comparingLong(e -> e.getTime().getTimeInMillis()))
+                        .collect(Collectors.toList());
+            } else {
+                List<InternalActEntity> currentActs = new ArrayList<>();
+                for (InternalActEntity act : MarkedActsService.getMarked()) {
+                    //NOW OR ALREADY PAST and the END in the FUTURE
+                    if (act.getTime().compareTo(now) <= 0 &&
+                            act.getEnd().compareTo(now) > 0) {
+                        currentActs.add(act);
+                    }
+                }
+                Collections.sort(currentActs, (o1, o2) -> Long.compare(o1.getTime().getTimeInMillis(), o2.getTime().getTimeInMillis()));
+                return currentActs;
+            }
+        }
+    }
+
+    public static List<InternalActEntity> getUpcomingActs(Calendar now, long upcomingOffset) {
+        synchronized (MarkedActsService.actsLock) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                return MarkedActsService.getMarked().parallelStream()
+                        .filter(e -> e.getTime().after(now) &&
+                                e.getTime().getTimeInMillis() - now.getTimeInMillis() <= upcomingOffset)
+                        .sorted(Comparator.comparingLong(e -> e.getTime().getTimeInMillis()))
+                        .collect(Collectors.toList());
+            } else {
+                List<InternalActEntity> upcomingActs = new ArrayList<>();
+                for (InternalActEntity act : MarkedActsService.getMarked()) {
+                    if (act.getTime().after(now) &&
+                            act.getTime().getTimeInMillis() - now.getTimeInMillis() <= upcomingOffset) {
+                        upcomingActs.add(act);
+                    }
+                }
+                Collections.sort(upcomingActs, (o1, o2) -> Long.compare(o1.getTime().getTimeInMillis(), o2.getTime().getTimeInMillis()));
+                return upcomingActs;
+            }
+        }
     }
 
     @Subscribe
