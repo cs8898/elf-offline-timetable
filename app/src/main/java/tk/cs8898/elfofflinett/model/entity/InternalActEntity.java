@@ -16,18 +16,16 @@ public class InternalActEntity {
     private ActEntity act;
     private StageEntity stage;
     private boolean marked;
-    private long id;
     private Calendar time;
     private Calendar end;
 
-    public InternalActEntity(StageEntity stage, ActEntity act, long id) {
-        this(stage, act, id, false);
+    public InternalActEntity(StageEntity stage, ActEntity act) {
+        this(stage, act, false);
     }
 
-    public InternalActEntity(StageEntity stage, ActEntity act, long id, boolean marked) {
+    public InternalActEntity(StageEntity stage, ActEntity act, boolean marked) {
         this.stage = stage;
         this.act = act;
-        this.id = id;
         this.marked = marked;
         this.time = getCalendarTime();
         this.end = getCalendarEnd();
@@ -107,14 +105,6 @@ public class InternalActEntity {
         }else{
             return Color.parseColor(getStage().getColorB());
         }
-    }
-
-    public void setId(long id){
-        this.id = id;
-    }
-
-    public long getId(){
-        return id;
     }
 
     @Override

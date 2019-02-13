@@ -80,12 +80,11 @@ public class MarkedActsService {
 
     public static void setAllActs(Context context, StageEntity[] stages, boolean update) {
         //saveMarks(context);
-        int i = 0;
         synchronized (actsLock) {
             acts = new ArrayList<>();
             for (StageEntity stage : stages) {
                 for (ActEntity act : stage.getActs()) {
-                    acts.add(new InternalActEntity(stage, act, i++));
+                    acts.add(new InternalActEntity(stage, act));
                 }
             }
         }
@@ -115,46 +114,28 @@ public class MarkedActsService {
     }
 
     private static void loadMarks(Context context) {
-        if (acts != null) {
-            SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
-            Set<String> markSet = preferences.getStringSet(PREF_MARKED_NAME, new HashSet<>());
-
-            assert markSet != null;
-            Log.d(MarkedActsService.class.getSimpleName(), "Loaded " + markSet.size() + " Marks from Prefs");
-            synchronized (actsLock) {
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+        Set<String> markSet = preferences.getStringSet(PREF_MARKED_NAME, new HashSet<>());
+        assert markSet != null;
+        Log.d(MarkedActsService.class.getSimpleName(), "Loaded " + markSet.size() + " Marks from Prefs");
+        synchronized (actsLock) {
+            if (acts != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Log.d("Steam","STREAM");
                     acts.parallelStream()
                             .filter(e -> markSet.contains(e.toString()))
                             .forEach(e -> e.setMarked(true));
                 } else {
                     //Log.d("MarkedActsService", "Marking " + marked);
+                    Log.d("ITER","ITER");
                     for (InternalActEntity act : acts) {
                         if (markSet.contains(act.toString())) {
                             act.setMarked(true);
-                            break;
                         }
                     }
                 }
             }
         }
-    }
-
-    public static InternalActEntity findAct(long id) {
-        synchronized (actsLock) {
-            if (acts != null)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    return acts.parallelStream()
-                            .filter(e -> e.getId() == id)
-                            .findFirst().orElse(null);
-                } else {
-                    for (InternalActEntity act : acts) {
-                        if (act.getId() == id) {
-                            return act;
-                        }
-                    }
-                }
-        }
-        return null;
     }
 
     public static InternalActEntity findAct(String actString) {
