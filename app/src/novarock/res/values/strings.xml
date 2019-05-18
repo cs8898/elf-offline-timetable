@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name" translatable="false">NovaRock 19 OfflineTimetable</string>
+    <string name="nav_header_title" translatable="false">NovaRock Festival 2019</string>
+    <string name="timetable_url" translatable="false">https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/novarock9tt_min.json</string>
+</resources>
