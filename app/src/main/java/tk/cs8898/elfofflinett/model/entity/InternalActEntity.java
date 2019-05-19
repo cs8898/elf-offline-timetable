@@ -16,8 +16,8 @@ public class InternalActEntity {
     private ActEntity act;
     private StageEntity stage;
     private boolean marked;
-    private Calendar time;
-    private Calendar end;
+    private final Calendar time;
+    private final Calendar end;
 
     public InternalActEntity(StageEntity stage, ActEntity act) {
         this(stage, act, false);
@@ -29,6 +29,9 @@ public class InternalActEntity {
         this.marked = marked;
         this.time = getCalendarTime();
         this.end = getCalendarEnd();
+        Log.d("InternalActEntityConst",this.act.getAct()+" "+this.act.getTime()+" -> "+time.getTimeInMillis());
+        if(end.before(time))
+            throw new IllegalArgumentException("End is Before Start "+this.toString());
     }
 
     public ActEntity getAct() {
@@ -58,7 +61,6 @@ public class InternalActEntity {
     private Calendar getCalendarTime() {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"),Locale.GERMANY);
         try {
-            //Log.d("InternalActEntry", "Time is" + this.act.getTime());
             cal.setTime(dateFormat.parse(this.act.getTime()));
         } catch (Exception e) {
             //e.printStackTrace();

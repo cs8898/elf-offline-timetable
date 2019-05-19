@@ -8,14 +8,18 @@ import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -117,11 +121,11 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         BusProvider.getInstance().register(this);
-        SharedPreferences prefs = getSharedPreferences(PREFERENCES_NAME,MODE_PRIVATE);
-        boolean autoStarted = prefs.getBoolean(PREF_AUTOSTARTED_NAME,false);
-        if(!autoStarted){
-            Log.d("MainActivity","Was not Autostarted Need To Start services now");
-            getSharedPreferences(PREFERENCES_NAME,MODE_PRIVATE).edit()
+        SharedPreferences prefs = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        boolean autoStarted = prefs.getBoolean(PREF_AUTOSTARTED_NAME, false);
+        if (!autoStarted) {
+            Log.d("MainActivity", "Was not Autostarted Need To Start services now");
+            getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE).edit()
                     .remove(PREF_NOTIFICATION_LAST_SHOWN_ONSTAGE_TIME_NAME)
                     .remove(PREF_NOTIFICATION_LAST_SHOWN_UPCOMING_TIME_NAME)
                     .apply();
@@ -133,8 +137,8 @@ public class MainActivity extends AppCompatActivity
                 FetchTimeTableService.scheduleFetchTimetable(this, true, true);
                 NotificationService.scheduleInitNotification(this);
             }
-        }else{
-            Log.d("MainActivity","I Was Autostarted, so i wont init the Notifications, but will trigger a redraw");
+        } else {
+            Log.d("MainActivity", "I Was Autostarted, so i wont init the Notifications, but will trigger a redraw");
             //BusProvider.getInstance().post(new MessageDatasetChanged(Object.class));
         }
     }
@@ -146,13 +150,13 @@ public class MainActivity extends AppCompatActivity
         MarkedActsService.saveMarks(getApplicationContext(), true);
         BusProvider.getInstance().unregister(this);
     }
-    
+
     @Override
     public void onDestroy() {
         Log.d("MainActivity", "Here is the Destroy!!!");
         //Shouldn't be needed
-        getSharedPreferences(PREFERENCES_NAME,MODE_PRIVATE).edit()
-                .putBoolean(PREF_AUTOSTARTED_NAME,false)
+        getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE).edit()
+                .putBoolean(PREF_AUTOSTARTED_NAME, false)
                 .apply();
         super.onDestroy();
     }
@@ -268,7 +272,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onEventClick(WeekViewEvent event, RectF eventRect) {
-            if (ACTIVITY_VIEW_ALL.equals(currentView)){
+            if (ACTIVITY_VIEW_ALL.equals(currentView)) {
                 toggleEvent(event);
             }
         }
@@ -386,14 +390,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Subscribe
-    public void onOnlineNotFetchable(MessageOnlineNotFetchable message){
+    public void onOnlineNotFetchable(MessageOnlineNotFetchable message) {
         Log.d("MainActivity", "triggered Fetch Error");
-        runOnUiThread(()->{
+        runOnUiThread(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.alert_online_not_available_title)
                     .setMessage(R.string.alert_online_not_available_message)
                     .setCancelable(true)
-                    .setPositiveButton(R.string.accept_string,null)
+                    .setPositiveButton(R.string.accept_string, null)
                     .show();
         });
     }

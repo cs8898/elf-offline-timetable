@@ -29,36 +29,36 @@ public class FetchTimeTableLogic {
     private static final String LOCAL_FILE = "elfofflinett.json";
     private static final ReentrantLock LOAD_LOCK = new ReentrantLock();
 
-    public static Thread getThreadActionFetchTimetable(final Context context, final String url, final boolean offline, final boolean update){
-        return new Thread(){
+    public static Thread getThreadActionFetchTimetable(final Context context, final String url, final boolean offline, final boolean update) {
+        return new Thread() {
             @Override
-            public void run(){
-                handleActionFetchTimetable(context,url,offline,update);
+            public void run() {
+                handleActionFetchTimetable(context, url, offline, update);
             }
         };
     }
 
     public static void handleActionFetchTimetable(Context context, String url, boolean offline, boolean update) {
         boolean success = false;
-        if(!LOAD_LOCK.tryLock()) {
-            Log.d(FetchTimeTableLogic.class.getSimpleName(),"There is already some Fetch running");
+        if (!LOAD_LOCK.tryLock()) {
+            Log.d(FetchTimeTableLogic.class.getSimpleName(), "There is already some Fetch running");
             return;
         }
-        if(!loadOffline(context, update)){
-            offline=false;//Force Loading Online when there was no offline file
-        }else{
-            success=true;
+        if (!loadOffline(context, update)) {
+            offline = false;//Force Loading Online when there was no offline file
+        } else {
+            success = true;
         }
         if (!offline && Common.isOnline(context)) {
-            if(fetchOnline(context, url)) {
+            if (fetchOnline(context, url)) {
                 success = loadOffline(context, update);
-            }else {
+            } else {
                 success = false;
             }
         }
         LOAD_LOCK.unlock();
         BusProvider.getInstance().post(new MessageDatasetReady(FetchTimeTableService.class));
-        if(!success) {
+        if (!success) {
             Log.d(FetchTimeTableLogic.class.getSimpleName(), "No success in fetching the timetable.");
             BusProvider.getInstance().post(new MessageOnlineNotFetchable(FetchTimeTableService.class));
         }
@@ -106,27 +106,34 @@ public class FetchTimeTableLogic {
             String jsonBody = new String(data, "UTF-8");
 
             StageEntity[] stages;
-            try{
+            try {
                 Gson gson = new Gson();
                 stages = gson.fromJson(jsonBody, StageEntity[].class);
-            }catch (JsonSyntaxException e){
+            } catch (JsonSyntaxException e) {
                 return false;
             }
+
             /*
             //DEBUG EVENTS
             stages[0].getActs().clear();
             stages[1].getActs().clear();
             stages[2].getActs().clear();
-            stages[3].getActs().clear();
-            for(int d = 20; d <= 30; d++) {
-                for (int h = 0; h <= 23; h++) {
-                    stages[0].getActs().add(new ActEntity("January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":00", "0-" + d + "-" + h, "January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":45"));
-                    stages[1].getActs().add(new ActEntity("January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":15", "1-" + d + "-" + h, "January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":45"));
-                    stages[2].getActs().add(new ActEntity("January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":30", "2-" + d + "-" + h, "January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", (h+1)%24) + ":00"));
-                    stages[3].getActs().add(new ActEntity("January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":45", "3-" + d + "-" + h, "January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", (h+1)%24) + ":15"));
+            //stages[3].getActs().clear();
+            boolean first = false;
+            for (int d = 14; d <= 14; d++) {
+                for (int h = 13; h <= 13; h++) {
+                    stages[0].getActs().add(new ActEntity("June " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":00", "0-" + d + "-" + h, "June " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":45"));
+                    if (first) {
+                        stages[0].getActs().add(new ActEntity("June " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":00", "d0-" + d + "-" + h, "June " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":45"));
+                        first = false;
+                    }
+                    //stages[1].getActs().add(new ActEntity("June " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":15", "1-" + d + "-" + h, "June " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":45"));
+                    //stages[2].getActs().add(new ActEntity("June " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":30", "2-" + d + "-" + h, "June " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", (h + 1) % 24) + ":00"));
+                    //stages[3].getActs().add(new ActEntity("June " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":45", "3-" + d + "-" + h, "January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", (h+1)%24) + ":15"));
                 }
             }
-            */
+            //*/
+
             MarkedActsService.setAllActs(context.getApplicationContext(), stages, update);
             Log.d("FetchTimeTableService", "fetched " + stages.length + " stages");
             return true;

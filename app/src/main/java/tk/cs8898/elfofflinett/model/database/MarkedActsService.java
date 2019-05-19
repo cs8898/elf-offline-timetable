@@ -121,13 +121,13 @@ public class MarkedActsService {
         synchronized (actsLock) {
             if (acts != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    Log.d("Steam","STREAM");
+                    Log.d("Steam", "STREAM");
                     acts.parallelStream()
                             .filter(e -> markSet.contains(e.toString()))
                             .forEach(e -> e.setMarked(true));
                 } else {
                     //Log.d("MarkedActsService", "Marking " + marked);
-                    Log.d("ITER","ITER");
+                    Log.d("ITER", "ITER");
                     for (InternalActEntity act : acts) {
                         if (markSet.contains(act.toString())) {
                             act.setMarked(true);
@@ -204,7 +204,9 @@ public class MarkedActsService {
                 }
             }
         }
-        return min;
+        if (min != null)
+            return (Calendar) min.clone();
+        return null;
     }
 
     public static Calendar getMaxDate() {
@@ -224,6 +226,8 @@ public class MarkedActsService {
                 }
             }
         }
-        return max;
+        if (max != null)
+            return (Calendar) max.clone();
+        return null;
     }
 }
