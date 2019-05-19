@@ -81,7 +81,7 @@ public class NotificationLogicTest {
             for (int h = 1; h <= 23; h++) {
                 stages[0].getActs().add(new ActEntity("January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":00", "0-" + d + "-" + h, "January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":45"));
                 stages[1].getActs().add(new ActEntity("January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":15", "1-" + d + "-" + h, "January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":45"));
-                stages[2].getActs().add(new ActEntity("January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":30", "2-" + d + "-" + h, "January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", (h+1)%24) + ":00"));
+                stages[2].getActs().add(new ActEntity("January " + d + ", 2019 " + String.format(Locale.GERMAN, "%02d", h) + ":30", "2-" + d + "-" + h, "January " + (d+(h==23?1:0)) + ", 2019 " + String.format(Locale.GERMAN, "%02d", (h+1)%24) + ":00"));
             }
         }
         // END Build The Stage Array
