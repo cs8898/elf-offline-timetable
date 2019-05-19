@@ -3,7 +3,7 @@
     <string name="navigation_drawer_open">Öffne Navigation</string>
     <string name="navigation_drawer_close">Schließe Navigation</string>
     <string name="action_refresh">Aktualisieren</string>
-    <string name="title_activity_licence">OpenSource-Lizenzen</string>
+    <string name="title_activity_licence">Infos und Lizenzen</string>
     <string name="nav_home_text">Mein Timetable</string>
     <string name="nav_all_text">Alle Events</string>
     <string name="filters">Filter</string>
@@ -13,4 +13,5 @@
     <string name="accept_string">Ok</string>
     <string name="alert_online_not_available_title">Online Timetable nicht verfügbar</string>
     <string name="alert_online_not_available_message">Eventuell bist du offline, oder der neue Timetable existiert noch nicht.\nVersuch es später erneut…</string>
+    <string name="info_text">Diese App steht in keinem Zusammenhang mit der originalen App.\nDer Timetable wurde von hand erstellt. Es können Fehler auftreten.\nBitte maile mir doch einfach christian@raketeufo.ml</string>
 </resources>

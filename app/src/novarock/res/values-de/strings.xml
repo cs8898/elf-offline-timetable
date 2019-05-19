@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="info_text">Diese App steht in keinem Zusammenhang mit der originalen App.\nDer Timetable wurde über eine API erstellt. Es können Fehler auftreten.\nBitte maile mir doch einfach christian@raketeufo.ml\n\nHerzliches Dankeschön an die volume.at Devs für die Api.</string>
+</resources>

@@ -2,4 +2,5 @@
     <string name="app_name" translatable="false">NovaRock 19 OfflineTimetable</string>
     <string name="nav_header_title" translatable="false">NovaRock Festival 2019</string>
     <string name="timetable_url" translatable="false">https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/novarock19tt_min.json</string>
+    <string name="info_text">This App stands in no Contract to the original Application.\nThe Timetable is generated using an API. Errors may occur.\nPlease mail me christian@raketeufo.ml\n\nShoutout to the volume.at devs for their API.</string>
 </resources>
