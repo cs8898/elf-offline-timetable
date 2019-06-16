@@ -9,7 +9,7 @@
     <string name="filters">Filter</string>
     <string name="other">Andere</string>
     <string name="switch_display_days">Mehr Tage Anzeigen</string>
-    <string name="notification_earlier_time">Benachrichtigungs Einsellungen</string>
+    <string name="notification_earlier_time">Benachrichtigungs Einstellungen</string>
     <string name="accept_string">Ok</string>
     <string name="alert_online_not_available_title">Online Timetable nicht verfügbar</string>
     <string name="alert_online_not_available_message">Eventuell bist du offline, oder der neue Timetable existiert noch nicht.\nVersuch es später erneut…</string>
