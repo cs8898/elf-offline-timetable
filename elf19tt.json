@@ -724,8 +724,8 @@
   {
     "name": "Honeycomb Techno",
     "divname": "honeycombtechno",
-    "colorA": "#e05e76",
-    "colorB": "#ea99a2",
+    "colorA": "#eeb81f",
+    "colorB": "#f3c33e",
     "acts": [
       {
         "time": "July 4, 2019 16:00",
@@ -763,12 +763,12 @@
         "end": "July 5, 2019 00:30"
       },
       {
-        "time": "July 4, 2019 00:30",
+        "time": "July 5, 2019 00:30",
         "act": "Umek",
         "end": "July 5, 2019 02:30"
       },
       {
-        "time": "July 4, 2019 02:30",
+        "time": "July 5, 2019 02:30",
         "act": "Klaudia Gawlas",
         "end": "July 5, 2019 04:00"
       },
@@ -860,6 +860,129 @@
       {
         "time": "July 7, 2019 03:00",
         "act": "Black Lotus",
+        "end": "July 7, 2019 04:00"
+      }
+    ]
+  },
+  {
+    "name": "Shutdown Uptempo Cage",
+    "divname": "shutdownuptempocage",
+    "colorA": "#40371f",
+    "colorB": "#7f6d3e",
+    "acts": [
+      {
+        "time": "July 5, 2019 16:45",
+        "act": "Hosted by MC No ID",
+        "end": "July 5, 2019 17:00"
+      },
+      {
+        "time": "July 5, 2019 17:00",
+        "act": "Poley Tight",
+        "end": "July 5, 2019 18:00"
+      },
+      {
+        "time": "July 5, 2019 18:00",
+        "act": "Hernandez",
+        "end": "July 5, 2019 19:00"
+      },
+      {
+        "time": "July 5, 2019 19:00",
+        "act": "The Dope Doctor",
+        "end": "July 5, 2019 20:00"
+      },
+      {
+        "time": "July 5, 2019 20:00",
+        "act": "Lady Dammage",
+        "end": "July 5, 2019 21:00"
+      },
+      {
+        "time": "July 5, 2019 21:00",
+        "act": "The Sickest Squad",
+        "end": "July 5, 2019 22:00"
+      },
+      {
+        "time": "July 5, 2019 22:00",
+        "act": "Unexist",
+        "end": "July 5, 2019 23:00"
+      },
+      {
+        "time": "July 5, 2019 23:00",
+        "act": "Andy The Core",
+        "end": "July 5, 2019 23:59"
+      },
+      {
+        "time": "July 6, 2019 00:00",
+        "act": "Sjammienators",
+        "end": "July 6, 2019 01:00"
+      },
+      {
+        "time": "July 6, 2019 01:00",
+        "act": "Spitnoise",
+        "end": "July 6, 2019 02:00"
+      },
+      {
+        "time": "July 6, 2019 02:00",
+        "act": "DRS",
+        "end": "July 6, 2019 03:00"
+      },
+      {
+        "time": "July 6, 2019 03:00",
+        "act": "Greazy Puzzy Fuckerz",
+        "end": "July 6, 2019 04:00"
+      },
+      {
+        "time": "July 6, 2019 16:45",
+        "act": "Hosted by MC no ID",
+        "end": "July 6, 2019 17:00"
+      },
+      {
+        "time": "July 6, 2019 17:00",
+        "act": "Sativa",
+        "end": "July 6, 2019 18:00"
+      },
+      {
+        "time": "July 6, 2019 18:00",
+        "act": "Dot B",
+        "end": "July 6, 2019 19:00"
+      },
+      {
+        "time": "July 6, 2019 19:00",
+        "act": "Hard Effectz",
+        "end": "July 6, 2019 20:30"
+      },
+      {
+        "time": "July 6, 2019 20:30",
+        "act": "Chaotic Hostility",
+        "end": "July 6, 2019 22:00"
+      },
+      {
+        "time": "July 6, 2019 22:00",
+        "act": "Sprinky",
+        "end": "July 6, 2019 23:00"
+      },
+      {
+        "time": "July 6, 2019 23:00",
+        "act": "Hyrule War",
+        "end": "July 6, 2019 23:59"
+      },
+      {
+        "time": "July 7, 2019 00:00",
+        "act": "D-Fence",
+        "end": "July 7, 2019 01:30"
+      },
+      {
+        "time": "July 7, 2019 01:30",
+        "act": "Super Trash Bros Live",
+        "end": "July 7, 2019 02:00"
+      },
+      {
+        "time": "July 7, 2019 02:00",
+        "act": "Angernoizer",
+        "end": "July 7, 2019 03:00"
+      },
+      {
+        "time": "July 7, 2019 03:00",
+        "act": "NSD",
         "end": "July 7, 2019 04:00"
       }
     ]
