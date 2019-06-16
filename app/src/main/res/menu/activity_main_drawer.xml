@@ -35,10 +35,6 @@
                 android:id="@+id/nav_licence"
                 android:icon="@drawable/ic_menu_list"
                 android:title="@string/title_activity_licence" />
-            <item
-                android:icon="@drawable/ic_star_half"
-                android:title="@string/rating_note"
-                />
         </menu>
     </item>
 
