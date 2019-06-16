@@ -51,7 +51,7 @@ public class FetchTimeTableLogic {
         }
         if (!offline && Common.isOnline(context)) {
             if (fetchOnline(context, url)) {
-                success = loadOffline(context, update);
+                success = loadOffline(context, true);
             } else {
                 success = false;
             }
