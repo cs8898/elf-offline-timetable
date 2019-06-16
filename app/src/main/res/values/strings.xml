@@ -14,4 +14,5 @@
     <string name="alert_online_not_available_title">Online timetable not available</string>
     <string name="alert_online_not_available_message">Probably you are offline or the new timetable dosn\'t exist online.\nTry again later…</string>
     <string name="info_text">This App stands in no Contract to the original Application.\nThe Timetable is generated manually. Errors may occur.\nPlease mail me chris@raketeufo.ml</string>
+    <string name="rating_note">Bad ratings are OK, but plz give me some feedback</string>
 </resources>

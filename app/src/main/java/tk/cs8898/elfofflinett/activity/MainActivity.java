@@ -121,14 +121,15 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         BusProvider.getInstance().register(this);
-        SharedPreferences prefs = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
-        boolean autoStarted = prefs.getBoolean(PREF_AUTOSTARTED_NAME, false);
-        if (!autoStarted) {
-            Log.d("MainActivity", "Was not Autostarted Need To Start services now");
-            getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE).edit()
+        //SharedPreferences prefs = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        //boolean autoStarted = prefs.getBoolean(PREF_AUTOSTARTED_NAME, false);
+        //if (!autoStarted) {
+        //    Log.d("MainActivity", "Was not Autostarted Need To Start services now");
+        /*    getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE).edit()
                     .remove(PREF_NOTIFICATION_LAST_SHOWN_ONSTAGE_TIME_NAME)
                     .remove(PREF_NOTIFICATION_LAST_SHOWN_UPCOMING_TIME_NAME)
                     .apply();
+                    */
             try {
                 FetchTimeTableService.startActionFetchTimetable(this, true, true);
                 NotificationService.startActionInitNotification(this);
@@ -137,10 +138,10 @@ public class MainActivity extends AppCompatActivity
                 FetchTimeTableService.scheduleFetchTimetable(this, true, true);
                 NotificationService.scheduleInitNotification(this);
             }
-        } else {
-            Log.d("MainActivity", "I Was Autostarted, so i wont init the Notifications, but will trigger a redraw");
+        //} else {
+        //    Log.d("MainActivity", "I Was Autostarted, so i wont init the Notifications, but will trigger a redraw");
             //BusProvider.getInstance().post(new MessageDatasetChanged(Object.class));
-        }
+        //}
     }
 
     @Override
