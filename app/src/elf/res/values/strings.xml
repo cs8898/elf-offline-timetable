@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">ELF 22 OfflineTimetable</string>
     <string name="nav_header_title" translatable="false">Electric Love Festival 2022</string>
-    <string name="timetable_url" translatable="false">https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/elf22tt_min.json</string>
+    <string name="timetable_url" translatable="false">https://raw.githubusercontent.com/cs8898/elf-offline-timetable/json/elf22tt.json</string>
 </resources>
