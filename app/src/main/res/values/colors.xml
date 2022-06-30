@@ -4,10 +4,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>-->
 
-    <color name="colorPrimary">#B12B48</color>
-    <color name="colorPrimaryDark">#93233A</color>
-    <color name="colorPrimaryLight">#FFF9C4</color>
-    <color name="colorAccent">#F8C66F</color>
+    <color name="colorPrimary">#d584dd</color>
+    <color name="colorPrimaryDark">#A678EF</color>
+    <color name="colorPrimaryLight">#ECEF60</color>
+    <color name="colorAccent">#006CFF</color>
     <!--<color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="colorIcons">#FFFFFF</color>
