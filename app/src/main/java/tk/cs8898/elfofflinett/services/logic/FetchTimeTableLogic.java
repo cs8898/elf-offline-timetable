@@ -134,7 +134,12 @@ public class FetchTimeTableLogic {
             }
             //*/
 
-            MarkedActsService.setAllActs(context.getApplicationContext(), stages, update);
+            try {
+                MarkedActsService.setAllActs(context.getApplicationContext(), stages, update);
+            } catch (IllegalArgumentException e) {
+                Log.e("FetchTimeTableService", "Invalid Timetable", e);
+                return false;
+            }
             Log.d("FetchTimeTableService", "fetched " + stages.length + " stages");
             return true;
         } catch (IOException e) {
