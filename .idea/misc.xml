@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/bg_gradient.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.196" />
       </map>
     </option>
   </component>
