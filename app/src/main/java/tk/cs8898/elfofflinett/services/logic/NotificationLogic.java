@@ -216,7 +216,7 @@ public class NotificationLogic {
             notificationBuilder = new NotificationCompat.Builder(context.getApplicationContext(), NOTIFICATION_CURRENT_CHAN_ID);
 
             PendingIntent notificationIntent = PendingIntent.getActivity(context.getApplicationContext(), 0,
-                    new Intent(context.getApplicationContext(), MainActivity.class), 0);
+                    new Intent(context.getApplicationContext(), MainActivity.class), PendingIntent.FLAG_IMMUTABLE);
             notificationBuilder = notificationBuilder.setContentTitle("On Stage")
                     .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setContentText(notificationBody.toString())
@@ -256,7 +256,7 @@ public class NotificationLogic {
             notificationBuilder = new NotificationCompat.Builder(context.getApplicationContext(), NOTIFICATION_UPCOMING_CHAN_ID);
 
             PendingIntent notificationIntent = PendingIntent.getActivity(context.getApplicationContext(), 0,
-                    new Intent(context.getApplicationContext(), MainActivity.class), 0);
+                    new Intent(context.getApplicationContext(), MainActivity.class), PendingIntent.FLAG_IMMUTABLE);
             notificationBuilder = notificationBuilder.setContentTitle("Upcomeing")
                     .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setContentText(notificationBody.toString())
